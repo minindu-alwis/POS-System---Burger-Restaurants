@@ -52,12 +52,55 @@ function mainburgerpage(){
     return(
         ` 
        <div class="background-container">
-        <ul>
-  <li><a href="default.asp">Home</a></li>
-  <li><a href="news.asp">News</a></li>
-  <li><a href="contact.asp">Contact</a></li>
-  <li><a href="about.asp">About</a></li>
-</ul>
+         <div style="display:flex;justify-content:space-between;align-items:center;background-color:#ff9800;padding:10px;">
+        <div style="font-size:24px;font-weight:bold;color:white;">Burger Shop POS</div>
+        <div id="nav-links" style="display:flex;gap:15px;">
+            <a href="#home" style="text-decoration:none;color:white;font-size:18px;">Home</a>
+            <a href="#orders" style="text-decoration:none;color:white;font-size:18px;">Orders</a>
+            <a href="#menu" style="text-decoration:none;color:white;font-size:18px;">Menu</a>
+            <a href="#settings" style="text-decoration:none;color:white;font-size:18px;">Settings</a>
+        </div>
+        <div id="menu-toggle" onclick="toggleMenu()" style="display:none;cursor:pointer;">
+            <span style="font-size:24px;color:white;">☰</span>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('nav-links');
+            if (navLinks.style.display === 'none' || navLinks.style.display === '') {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.backgroundColor = '#ff9800';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '50px';
+                navLinks.style.width = '100%';
+                navLinks.style.padding = '10px';
+            } else {
+                navLinks.style.display = 'none';
+            }
+        }
+
+        // Responsive script
+        window.addEventListener('resize', () => {
+            const navLinks = document.getElementById('nav-links');
+            const menuToggle = document.getElementById('menu-toggle');
+            if (window.innerWidth > 600) {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'row';
+                menuToggle.style.display = 'none';
+            } else {
+                navLinks.style.display = 'none';
+                menuToggle.style.display = 'block';
+            }
+        });
+
+        // Initial check
+        if (window.innerWidth <= 600) {
+            document.getElementById('nav-links').style.display = 'none';
+            document.getElementById('menu-toggle').style.display = 'block';
+        }
+    </script>
 <div>
 `
      )
