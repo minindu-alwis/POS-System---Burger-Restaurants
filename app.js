@@ -49,7 +49,6 @@ function comp(){
 }
 
 
-
 function mainburgerpage() {
     return `
         <div class="background-container">
@@ -70,7 +69,6 @@ function mainburgerpage() {
 }
 
 
-document.body.innerHTML = mainburgerpage();
 
 function toggleMenu() {
     const navLinks = document.getElementById('nav-links');
