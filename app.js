@@ -19,18 +19,32 @@ function login(){
         alert("Password / Username Incorrect ");
     }
 
-
-
 }
 
-comp().then(res=>res.text()).then(data=>{
-    document.getElementById("root").innerHTML=data
-    console.log(data)
-})
 
+document.getElementById("root").innerHTML=comp();
 
-async function comp(){
-   return await fetch("/login.html");
+function comp(){
+    return(
+        ` 
+       <video id="background-video" autoplay muted loop>
+    <source src="videos/123.mp4" type="video/mp4">
+</video>
+
+<div class="main">
+    <div class="login">
+        <form>
+            <label for="chk" aria-hidden="true">Admin Login</label>
+            <input type="email" name="email" placeholder="Email" required="" id="email">
+            <input type="password" name="pswd" placeholder="Password" required="" id="password">
+            <button onclick="login()">Login</button>
+            <img src="img/123.png" alt="User Avatar">
+            <h2 id="heading">Mos Burger</h2>
+        </form>
+    </div>
+</div>
+`
+    )
   
 }
 
