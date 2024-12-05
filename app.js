@@ -13,6 +13,11 @@ function login(){
     if(userinputemail==username && userinputpassword==password){
 
         document.getElementById("root").innerHTML=mainburgerpage();
+        document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
+
+        window.addEventListener('resize', handleResize);
+
+        handleResize();
 
 
     }else{
@@ -85,7 +90,7 @@ function toggleMenu() {
     }
 }
 
-document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
+
 
 function handleResize() {
     const navLinks = document.getElementById('nav-links');
@@ -100,6 +105,4 @@ function handleResize() {
     }
 }
 
-window.addEventListener('resize', handleResize);
 
-handleResize();
