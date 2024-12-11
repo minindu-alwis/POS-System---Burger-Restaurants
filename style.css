@@ -36,7 +36,7 @@ body {
   .background-container {
     width: 100%;
     height: 100vh;
-    background-image: url('img/back.jpg');
+    background-image: url('img/backk.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -102,4 +102,129 @@ img {
   margin: 20px auto;
   border-radius: 50%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.pos-system {
+  display: flex;
+  height: 500vh;
+}
+
+.sidebar {
+  background-color: #333;
+  padding: 20px;
+  width: 200px;
+}
+
+.sidebar-logo {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.sidebar-menu .menu-item {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sidebar-menu .menu-item.active {
+  background-color: #f39c12;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #222;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.categories {
+  display: flex;
+  margin: 20px 0;
+}
+
+.category-tab {
+  background-color: #444;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.category-tab.active {
+  background-color: #f39c12;
+}
+
+.menu-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.menu-item {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.menu-img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.order-summary {
+  width: 300px;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.order-total p {
+  margin: 10px 0;
+}
+
+.print-btn {
+  background-color: #f39c12;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  cursor: pointer;
+}
+
+
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.remove-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.remove-btn:hover {
+  background-color: #c0392b;
 }
