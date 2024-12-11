@@ -228,3 +228,69 @@ img {
 .remove-btn:hover {
   background-color: #c0392b;
 }
+
+
+.completed-orders {
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+}
+
+.completed-order-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.completed-order-item p {
+  margin: 5px 0;
+}
+
+.completed-order-item ul {
+  margin: 5px 0;
+  padding-left: 20px;
+}
+
+.remove-completed-btn {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.remove-completed-btn:hover {
+  background-color: #e63946;
+}
+
+
+.completed-orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+}
+
+.completed-orders-table th, 
+.completed-orders-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.completed-orders-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.completed-orders-table td ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.completed-orders-table td ul li {
+  list-style-type: none;
+}
