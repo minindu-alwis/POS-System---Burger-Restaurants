@@ -271,22 +271,20 @@ function mainburgerpage() {
 
 
 
-<div id="remove">
+
+  <div id="remove">
   <section class="completed-orders">
     <h2>Completed Orders</h2>
-    
-    <!-- Input field for entering the order number -->
-    <label for="order-number-input">Enter Order Number:</label>
-    <input type="text" id="order-number-input" placeholder="Enter Order Number" />
-    <button id="search-order-btn" onclick="searchOrderByNumber()">Search Order</button>
-    
+    <input type="text" id="search-input" placeholder="Enter order number or phone number">
+    <button onclick="searchOrder()">Search</button>
     <button id="refresh-orders-btn" onclick="renderCompletedOrders()">Refresh</button>
-    
     <div id="completed-orders-list">
-      <!-- Completed orders table will be dynamically generated here -->
+      <!-- Completed orders details will be dynamically displayed here -->
     </div>
   </section>
 </div>
+
+
     `;
 }
 
@@ -427,21 +425,20 @@ function completeOrder() {
 
 
   //remove part
-
-  // Function to render completed orders in a table format
+// Function to render completed orders in a table format
 function renderCompletedOrders() {
     const completedOrdersList = document.getElementById('completed-orders-list');
     completedOrdersList.innerHTML = ''; // Clear the list before rendering
-  
+
     if (completedOrders.length === 0) {
       completedOrdersList.innerHTML = '<p>No completed orders found!</p>';
       return;
     }
-  
+
     // Create the table structure
     const table = document.createElement('table');
     table.classList.add('completed-orders-table');
-    
+
     // Add the table header
     const tableHeader = `
       <thead>
@@ -456,16 +453,19 @@ function renderCompletedOrders() {
       </thead>
     `;
     table.innerHTML = tableHeader;
-    
+
     // Add the table body with completed orders
     const tableBody = document.createElement('tbody');
     
+    let grandTotal = 0; // Variable to store the total of all orders
+
     completedOrders.forEach((order, index) => {
       const row = document.createElement('tr');
-      
+
       // Calculate total price for the order
       const totalPrice = order.items.reduce((acc, item) => acc + item.price, 0).toFixed(2);
-      
+      grandTotal += parseFloat(totalPrice); // Add the order total to the grand total
+
       // Create a row for each completed order
       row.innerHTML = `
         <td>${order.orderNumber}</td>
@@ -479,79 +479,132 @@ function renderCompletedOrders() {
         <td>$${totalPrice}</td>
         <td><button class="remove-completed-btn" onclick="removeCompletedOrder(${index})">Remove</button></td>
       `;
-      
+
       tableBody.appendChild(row);
     });
-    
+
     // Append the body to the table
     table.appendChild(tableBody);
-    
+
+    // Append a row for the grand total at the end of the table
+    const grandTotalRow = document.createElement('tr');
+    grandTotalRow.innerHTML = `
+      <td colspan="4" style="text-align: right;"><strong>Grand Total</strong></td>
+      <td><strong>$${grandTotal.toFixed(2)}</strong></td>
+      <td></td>
+    `;
+    table.appendChild(grandTotalRow);
+
     // Append the table to the completed orders list
     completedOrdersList.appendChild(table);
-  }
-  
+}
+
+// Function to remove a completed order
+function removeCompletedOrder(index) {
+    if (confirm('Are you sure you want to remove this order?')) {
+        // Remove the order from the array
+        completedOrders.splice(index, 1);
+
+        // Update the local storage if you're using it (optional)
+        // localStorage.setItem('completedOrders', JSON.stringify(completedOrders));
+
+        // Re-render the completed orders list
+        renderCompletedOrders();
+
+        alert('Order removed successfully!');
+    }
+}
   // Function to search for a specific order by number
-  function searchOrderByNumber() {
-    const orderNumberInput = document.getElementById('order-number-input').value.trim().toUpperCase();
+// Function to search for a specific order by order number or phone number (ignoring case)
+// Function to search for a specific order by order number or phone number (ignoring case)
+function searchOrder() {
+    const searchInput = document.getElementById('search-input').value.trim().toLowerCase(); // Convert input to lowercase
     const completedOrdersList = document.getElementById('completed-orders-list');
   
-    if (!orderNumberInput) {
-      alert('Please enter an order number!');
+    if (!searchInput) {
+      alert('Please enter an order number or phone number!');
       return;
     }
   
-    // Find the order based on the order number
-    const order = completedOrders.find(o => o.orderNumber === orderNumberInput);
+    // Find orders based on the order number or phone number, ignoring case
+    const orders = completedOrders.filter(o => 
+      o.orderNumber.toLowerCase().includes(searchInput) || o.customerPhone.toLowerCase().includes(searchInput)
+    ); // Compare both order number and phone number
   
-    if (!order) {
+    if (orders.length === 0) {
       completedOrdersList.innerHTML = '<p>Order not found!</p>';
       return;
     }
   
-    // Render the found order
-    renderFoundOrder(order);
-  }
-  
-  // Function to render a single found order
-  function renderFoundOrder(order) {
+    // Render the found orders
+    renderFoundOrders(orders);
+}
+
+// Function to render the found orders in a table
+function renderFoundOrders(orders) {
     const completedOrdersList = document.getElementById('completed-orders-list');
-    completedOrdersList.innerHTML = ''; // Clear the list before rendering
+    completedOrdersList.innerHTML = ''; // Clear previous results
   
-    const orderDiv = document.createElement('div');
-    orderDiv.classList.add('completed-order-item');
-    
-    // Calculate total price for the order
-    const totalPrice = order.items.reduce((acc, item) => acc + item.price, 0).toFixed(2);
+    // Create the table structure
+    const table = document.createElement('table');
+    table.classList.add('completed-orders-table');
   
-    orderDiv.innerHTML = `
-      <h3>Order Details</h3>
-      <p><strong>Order Number:</strong> ${order.orderNumber}</p>
-      <p><strong>Phone Number:</strong> ${order.customerPhone}</p>
-      <p><strong>Timestamp:</strong> ${order.timestamp}</p>
-      <p><strong>Items:</strong></p>
-      <ul>
-        ${order.items.map(item => `<li>${item.name} - $${item.price.toFixed(2)}</li>`).join('')}
-      </ul>
-      <p><strong>Total:</strong> $${totalPrice}</p>
-      <button class="remove-completed-btn" onclick="removeCompletedOrder(${completedOrders.indexOf(order)})">Remove Order</button>
+    // Add the table header
+    const tableHeader = `
+      <thead>
+        <tr>
+          <th>Order Number</th>
+          <th>Phone Number</th>
+          <th>Timestamp</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
     `;
+    table.innerHTML = tableHeader;
+  
+    // Add the table body with found orders
+    const tableBody = document.createElement('tbody');
     
-    completedOrdersList.appendChild(orderDiv);
-  }
+    let grandTotal = 0; // Variable to store the total of all orders
   
-  // Function to remove a completed order
-  function removeCompletedOrder(index) {
-    if (confirm('Are you sure you want to remove this order?')) {
-      // Remove the order from the array
-      completedOrders.splice(index, 1);
+    orders.forEach((order, index) => {
+      const row = document.createElement('tr');
   
-      // Update the local storage
-      saveCompletedOrders();
+      // Calculate total price for the order
+      const totalPrice = order.items.reduce((acc, item) => acc + item.price, 0).toFixed(2);
+      grandTotal += parseFloat(totalPrice); // Add the order total to the grand total
   
-      // Re-render the completed orders list
-      renderCompletedOrders();
+      // Create a row for each completed order
+      row.innerHTML = `
+        <td>${order.orderNumber}</td>
+        <td>${order.customerPhone}</td>
+        <td>${order.timestamp}</td>
+        <td>
+          <ul>
+            ${order.items.map(item => `<li>${item.name} - $${item.price.toFixed(2)}</li>`).join('')}
+          </ul>
+        </td>
+        <td>$${totalPrice}</td>
+        <td><button class="remove-completed-btn" onclick="removeCompletedOrder(${index})">Remove</button></td>
+      `;
   
-      alert('Order removed successfully!');
-    }
-  }
+      tableBody.appendChild(row);
+    });
   
+    // Append the body to the table
+    table.appendChild(tableBody);
+  
+    // Append a row for the grand total at the end of the table
+    const grandTotalRow = document.createElement('tr');
+    grandTotalRow.innerHTML = `
+      <td colspan="4" style="text-align: right;"><strong>Grand Total</strong></td>
+      <td><strong>$${grandTotal.toFixed(2)}</strong></td>
+      <td></td>
+    `;
+    table.appendChild(grandTotalRow);
+  
+    // Append the table to the completed orders list
+    completedOrdersList.appendChild(table);
+}
