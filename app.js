@@ -16,6 +16,7 @@ function login(){
         renderMenuItems();
         renderEditItemsTable();
         renderOrdersTable();
+        renderCustomersTable();
 
     }else{
         alert("Password / Username Incorrect ");
@@ -58,13 +59,13 @@ function mainburgerpage() {
     <div id="top">
          <div class="pos-system">
     <aside class="sidebar">
-      <div class="sidebar-logo">FAVBurger</div>
+      <div class="sidebar-logo" style="color:white;">Best Burgers </div>
       <nav class="navbar-menu">
     <a href="#" class="nav-item active">Home</a>
     <a href="#additems" class="nav-item">Add Items</a>
     <a href="#edititems" class="nav-item">Edit Items</a>
     <a href="#orders" class="nav-item">Orders</a>
-    <a href="#" class="nav-item">Settings</a>
+    <a href="#customers" class="nav-item">Customers</a>
 </nav>
 
     </aside>
@@ -73,7 +74,7 @@ function mainburgerpage() {
   <header class="header">
     <h1 class="restaurant-name">Mos Burger</h1>
     <input type="text" class="search-bar" id="search-bar" placeholder="Search menu by ID..." />
-    <button class="search-btn" id="search-btn" onClick="reding()">Search</button>
+    <button class="search-btn" id="search-btn" onClick="reding()" style="margin-bottom: 19px;">Search</button>
   </header>
   <section class="categories">
     <button class="category-tab active">Burger</button>
@@ -174,7 +175,30 @@ function mainburgerpage() {
   </table>
 </div>
 
+<div id="customers">
+  <h2>Customer Details</h2>
+  
+  
+  <div class="customer-search-container">
+    <input type="text" id="customer-search-bar" class="customer-search-bar" placeholder="Search by phone number...">
+    <button id="customer-search-btn" class="customer-search-btn" onclick="searchCustomer()">Search</button>
+  </div>
+  
 
+  <table id="customers-table">
+    <thead>
+      <tr>
+        <th>Customer Name</th>
+        <th>Phone Number</th>
+        <th>Total Spend</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+     
+    </tbody>
+  </table>
+</div>
 
 
 
@@ -187,56 +211,56 @@ function mainburgerpage() {
     `;
 }
 let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
-  { id: "B1001", name: "Classic Burger (Large)", price: 750.00, image: "img/111.jpg" },
-  { id: "B1002", name: "Classic Burger (Regular)", price: 1500.00, image: "img/111.jpg" },
-  { id: "B1003", name: "Turkey Burger", price: 1600.00, image: "img/111.jpg" },
-  { id: "B1004", name: "Chicken Burger (Large)", price: 1400.00, image: "img/111.jpg" },
-  { id: "B1005", name: "Chicken Burger (Regular)", price: 800.00, image: "img/111.jpg" },
-  { id: "B1006", name: "Cheese Burger (Large)", price: 1000.00, image: "img/111.jpg" },
-  { id: "B1007", name: "Cheese Burger (Regular)", price: 600.00, image: "img/111.jpg" },
-  { id: "B1008", name: "Bacon Burger", price: 650.00, image: "img/111.jpg" },
-  { id: "B1009", name: "Shawarma Burger", price: 800.00, image: "img/111.jpg" },
-  { id: "B1010", name: "Olive Burger", price: 1800.00, image: "img/111.jpg" },
-  { id: "B1012", name: "Double-Cheese Burger", price: 1250.00, image: "img/111.jpg" },
-  { id: "B1013", name: "Crispy Chicken Burger (Regular)", price: 1200.00, image: "img/111.jpg" },
-  { id: "B1014", name: "Crispy Chicken Burger (Large)", price: 1600.00, image: "img/111.jpg" },
-  { id: "B1015", name: "Paneer Burger", price: 900.00, image: "img/111.jpg" },
-  { id: "B1016", name: "Crispy Chicken Submarine (Large)", price: 2000.00, image: "img/111.jpg" },
-  { id: "B1017", name: "Crispy Chicken Submarine (Regular)", price: 1500.00, image: "img/111.jpg" },
-  { id: "B1018", name: "Chicken Submarine (Large)", price: 1800.00, image: "img/111.jpg" },
-  { id: "B1019", name: "Chicken Submarine (Regular)", price: 1400.00, image: "img/111.jpg" },
-  { id: "B1020", name: "Grinder Submarine", price: 2300.00, image: "img/111.jpg" },
-  { id: "B1021", name: "Cheese Submarine", price: 2200.00, image: "img/111.jpg" },
-  { id: "B1022", name: "Double Cheese n Chicken Submarine", price: 1900.00, image: "img/111.jpg" },
-  { id: "B1023", name: "Special Horgie Submarine", price: 2800.00, image: "img/111.jpg" },
-  { id: "B1024", name: "MOS Special Submarine", price: 3000.00, image: "img/111.jpg" },
-  { id: "B1025", name: "Steak Fries (Large)", price: 1200.00, image: "img/111.jpg" },
-  { id: "B1026", name: "Steak Fries (Medium)", price: 600.00, image: "img/111.jpg" },
-  { id: "B1027", name: "French Fries (Large)", price: 800.00, image: "img/111.jpg" },
-  { id: "B1028", name: "French Fries (Medium)", price: 650.00, image: "img/111.jpg" },
-  { id: "B1029", name: "French Fries (Small)", price: 450.00, image: "img/111.jpg" },
-  { id: "B1030", name: "Sweet Potato Fries (Large)", price: 600.00, image: "img/111.jpg" },
-  { id: "B1031", name: "Chicken n Cheese Pasta", price: 1600.00, image: "img/111.jpg" },
-  { id: "B1032", name: "Chicken Penne Pasta", price: 1700.00, image: "img/111.jpg" },
-  { id: "B1033", name: "Ground Turkey Pasta Bake", price: 2900.00, image: "img/111.jpg" },
-  { id: "B1034", name: "Creamy Shrimp Pasta", price: 2000.00, image: "img/111.jpg" },
-  { id: "B1035", name: "Lemon Butter Pasta", price: 1950.00, image: "img/111.jpg" },
-  { id: "B1036", name: "Tagliatelle Pasta", price: 2400.00, image: "img/111.jpg" },
-  { id: "B1037", name: "Baked Ravioli", price: 2000.00, image: "img/111.jpg" },
-  { id: "B1038", name: "Fried Chicken (Small)", price: 1200.00, image: "img/111.jpg" },
-  { id: "B1039", name: "Fried Chicken (Regular)", price: 2300.00, image: "img/111.jpg" },
-  { id: "B1040", name: "Fried Chicken (Large)", price: 3100.00, image: "img/111.jpg" },
-  { id: "B1041", name: "Hot Wings (Large)", price: 2400.00, image: "img/111.jpg" },
-  { id: "B1042", name: "Devilled Chicken (Large)", price: 900.00, image: "img/111.jpg" },
-  { id: "B1043", name: "BBQ Chicken (Regular)", price: 2100.00, image: "img/111.jpg" },
-  { id: "B1044", name: "Pepsi (330ml)", price: 990.00, image: "img/111.jpg" },
-  { id: "B1045", name: "Coca-Cola (330ml)", price: 1230.00, image: "img/111.jpg" },
-  { id: "B1046", name: "Sprite (330ml)", price: 1500.00, image: "img/111.jpg" },
-  { id: "B1047", name: "Mirinda (330ml)", price: 850.00, image: "img/111.jpg" }
+  { id: "B1001", name: "Classic Burger (Large)", price: 750.00, image: "img/1.jpeg" },
+  { id: "B1002", name: "Classic Burger (Regular)", price: 1500.00, image: "img/2.jpeg" },
+  { id: "B1003", name: "Turkey Burger", price: 1600.00, image: "img/3.jpeg" },
+  { id: "B1004", name: "Chicken Burger (Large)", price: 1400.00, image: "img/4.jpeg" },
+  { id: "B1005", name: "Chicken Burger (Regular)", price: 800.00, image: "img/5.jpeg" },
+  { id: "B1006", name: "Cheese Burger (Large)", price: 1000.00, image: "img/6.jpeg" },
+  { id: "B1007", name: "Cheese Burger (Regular)", price: 600.00, image: "img/7.jpg" },
+  { id: "B1008", name: "Bacon Burger", price: 650.00, image: "img/8.jpeg" },
+  { id: "B1009", name: "Shawarma Burger", price: 800.00, image: "img/9.jpeg" },
+  { id: "B1010", name: "Olive Burger", price: 1800.00, image: "img/10.jpeg" },
+  { id: "B1012", name: "Double-Cheese Burger", price: 1250.00, image: "img/11.jpeg" },
+  { id: "B1013", name: "Crispy Chicken Burger (Regular)", price: 1200.00, image: "img/12.jpeg" },
+  { id: "B1014", name: "Crispy Chicken Burger (Large)", price: 1600.00, image: "img/13.jpeg" },
+  { id: "B1015", name: "Paneer Burger", price: 900.00, image: "img/14.jpeg" },
+  { id: "B1016", name: "Crispy Chicken Submarine (Large)", price: 2000.00, image: "img/15.jpeg" },
+  { id: "B1017", name: "Crispy Chicken Submarine (Regular)", price: 1500.00, image: "img/16.jpeg" },
+  { id: "B1018", name: "Chicken Submarine (Large)", price: 1800.00, image: "img/17.jpeg" },
+  { id: "B1019", name: "Chicken Submarine (Regular)", price: 1400.00, image: "img/18.jpeg" },
+  { id: "B1020", name: "Grinder Submarine", price: 2300.00, image: "img/19.jpeg" },
+  { id: "B1021", name: "Cheese Submarine", price: 2200.00, image: "img/20.jpeg" },
+  { id: "B1022", name: "Double Cheese n Chicken Submarine", price: 1900.00, image: "img/21.jpeg" },
+  { id: "B1023", name: "Special Horgie Submarine", price: 2800.00, image: "img/22.jpeg" },
+  { id: "B1024", name: "MOS Special Submarine", price: 3000.00, image: "img/23.jpeg" },
+  { id: "B1025", name: "Steak Fries (Large)", price: 1200.00, image: "img/24.jpeg" },
+  { id: "B1026", name: "Steak Fries (Medium)", price: 600.00, image: "img/25.jpeg" },
+  { id: "B1027", name: "French Fries (Large)", price: 800.00, image: "img/26.jpeg" },
+  { id: "B1028", name: "French Fries (Medium)", price: 650.00, image: "img/27.jpeg" },
+  { id: "B1029", name: "French Fries (Small)", price: 450.00, image: "img/28.jpeg" },
+  { id: "B1030", name: "Sweet Potato Fries (Large)", price: 600.00, image: "img/29.jpeg" },
+  { id: "B1031", name: "Chicken n Cheese Pasta", price: 1600.00, image: "img/30.jpeg" },
+  { id: "B1032", name: "Chicken Penne Pasta", price: 1700.00, image: "img/31.jpeg" },
+  { id: "B1033", name: "Ground Turkey Pasta Bake", price: 2900.00, image: "img/32.jpeg" },
+  { id: "B1034", name: "Creamy Shrimp Pasta", price: 2000.00, image: "img/33.jpeg" },
+  { id: "B1035", name: "Lemon Butter Pasta", price: 1950.00, image: "img/34.jpeg" },
+  { id: "B1036", name: "Tagliatelle Pasta", price: 2400.00, image: "img/35.jpeg" },
+  { id: "B1037", name: "Baked Ravioli", price: 2000.00, image: "img/36.jpeg" },
+  { id: "B1038", name: "Fried Chicken (Small)", price: 1200.00, image: "img/37.jpeg" },
+  { id: "B1039", name: "Fried Chicken (Regular)", price: 2300.00, image: "img/38.jpeg" },
+  { id: "B1040", name: "Fried Chicken (Large)", price: 3100.00, image: "img/39.jpeg" },
+  { id: "B1041", name: "Hot Wings (Large)", price: 2400.00, image: "img/40.jpeg" },
+  { id: "B1042", name: "Devilled Chicken (Large)", price: 900.00, image: "img/41.jpeg" },
+  { id: "B1043", name: "BBQ Chicken (Regular)", price: 2100.00, image: "img/42.jpeg" },
+  { id: "B1044", name: "Pepsi (330ml)", price: 990.00, image: "img/43.jpeg" },
+  { id: "B1045", name: "Coca-Cola (330ml)", price: 1230.00, image: "img/44.jpeg" },
+  { id: "B1046", name: "Sprite (330ml)", price: 1500.00, image: "img/45.jpeg" },
+  { id: "B1047", name: "Mirinda (330ml)", price: 850.00, image: "img/46.jpeg" }
 ];
 
 
-// Debug log to check menuItems before rendering
+
 console.log("Initial menu items:", menuItems);
 
 function renderMenuItems() {
@@ -318,32 +342,32 @@ function reding(){
   function render(searchQuery = '') {
     console.log("Rendering menu items:", menuItems);
   
-    // Check if menuItems is an array
+    
     if (!Array.isArray(menuItems)) {
       console.error("menuItems is not an array or is undefined");
       return;
     }
   
-    // Check if the menuItems array is empty
+    
     if (menuItems.length === 0) {
       console.error("menuItems array is empty");
       return;
     }
   
-    // Get the container where the menu items will be displayed
+  
     const menuGrid = document.querySelector('.menu-grid');
     if (!menuGrid) {
       console.error("menu-grid container not found");
       return;
     }
   
-    // Create a fragment to append all items efficiently
+    
     const fragment = document.createDocumentFragment();
     let itemsFound = false;
   
-    // Iterate through each item in the menuItems array
+   
     menuItems.forEach((item) => {
-      // Check if the searchQuery matches the item ID or name (case-insensitive)
+     
       if (searchQuery !== '') {
         if (item.id.toLowerCase().includes(searchQuery) || item.name.toLowerCase().includes(searchQuery)) {
           itemsFound = true;
@@ -361,7 +385,7 @@ function reding(){
           fragment.appendChild(menuItemElement);
         }
       } else {
-        // If no search query is provided, display all items
+       
         itemsFound = true;
   
         const menuItemElement = document.createElement('div');
@@ -378,12 +402,12 @@ function reding(){
       }
     });
   
-    // If no items are found based on the search query
+    
     if (!itemsFound) {
       menuGrid.innerHTML = '<p style="color:red;">No items found</p>'; 
     } else {
-      menuGrid.innerHTML = '';  // Clear current menu items
-      menuGrid.appendChild(fragment);  // Add filtered items to the grid
+      menuGrid.innerHTML = '';  
+      menuGrid.appendChild(fragment);  
     }
   }
   
@@ -448,27 +472,27 @@ function removeItem(index) {
 let orderItems = [];
 let currentOrderNumber = getNextOrderNumber();
 
-// Function to get the next Order Number from local storage
+
 function getNextOrderNumber() {
   const lastOrderId = localStorage.getItem('lastOrderId') || 'ODR00000';
   const lastNumber = parseInt(lastOrderId.replace('ODR', ''), 10);
   return `ODR${String(lastNumber + 1).padStart(5, '0')}`;
 }
 
-// Function to add burger to the order
+
 function addToOrder(name, price) {
   const existingItem = orderItems.find(item => item.name === name);
 
   if (existingItem) {
-    existingItem.qty += 1; // Increase quantity
+    existingItem.qty += 1; 
   } else {
-    orderItems.push({ name, price, qty: 1 }); // Add new item to the list
+    orderItems.push({ name, price, qty: 1 }); 
   }
 
   updateOrderList();
 }
 
-// Function to update the order list UI and calculate totals
+
 function updateOrderList() {
   const orderList = document.getElementById('order-list');
   const subtotalElement = document.getElementById('subtotal');
@@ -494,14 +518,14 @@ function updateOrderList() {
   totalElement.textContent = `$${subtotal.toFixed(2)}`;
 }
 
-// Function to save the current order to local storage
+
 function saveOrderToLocalStorage(customerName, phoneNumber) {
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
 
   const order = {
     id: currentOrderNumber,
-    customerName: customerName || 'N/A', // Save customer name
-    phoneNumber: phoneNumber || 'N/A',  // Save phone number
+    customerName: customerName || 'N/A', 
+    phoneNumber: phoneNumber || 'N/A',  
     items: orderItems,
     subtotal: orderItems.reduce((acc, item) => acc + item.price * item.qty, 0),
     total: orderItems.reduce((acc, item) => acc + item.price * item.qty, 0),
@@ -510,7 +534,7 @@ function saveOrderToLocalStorage(customerName, phoneNumber) {
   orders.push(order);
   localStorage.setItem('orders', JSON.stringify(orders));
 
-  // Update last Order ID
+  
   localStorage.setItem('lastOrderId', currentOrderNumber);
   console.log(orders);
 }
@@ -527,6 +551,7 @@ function printBill() {
   }
   saveOrderToLocalStorage(customerName, phoneNumber);
   renderOrdersTable();
+  renderCustomersTable();
   let billContent = `
     <div style="font-family: Arial, sans-serif; padding: 20px; width: 300px; margin: auto; text-align: center;">
       <h2 style="margin-bottom: 10px;">Mos Burger</h2>
@@ -570,9 +595,10 @@ function printBill() {
   printWindow.print();
 
   // Save order to local storage
-  
 
-  // Clear form and reset order
+
+
+  
   orderItems = [];
   currentOrderNumber = getNextOrderNumber();
   updateOrderList();
@@ -584,14 +610,13 @@ function printBill() {
 
 function renderOrdersTable() {
   const ordersTableBody = document.querySelector('#orders-table tbody');
-  ordersTableBody.innerHTML = '';  // Clear existing rows
-
+  ordersTableBody.innerHTML = '';  
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
 
   orders.forEach((order, orderIndex) => {
     const row = document.createElement('tr');
 
-    // Render items as editable fields
+    
     const itemsHtml = order.items.map((item, itemIndex) => {
       return `
         <div class="order-item">
@@ -622,7 +647,7 @@ function renderOrdersTable() {
     ordersTableBody.appendChild(row);
   });
 
-  // Add event listeners for editable fields (customer name and phone number)
+  
   document.querySelectorAll('.edit-customer-name').forEach(field => {
     field.addEventListener('input', (e) => {
       const orderIndex = e.target.getAttribute('data-order-index');
@@ -641,7 +666,7 @@ function renderOrdersTable() {
     });
   });
 
-  // Add event listeners for editable item fields (item name, quantity, price)
+  
   document.querySelectorAll('.edit-item-name').forEach(field => {
     field.addEventListener('input', (e) => {
       const orderIndex = e.target.getAttribute('data-order-index');
@@ -677,20 +702,21 @@ function saveOrder(orderIndex) {
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
   const order = orders[orderIndex];
 
-  // Update the order total
+  
   order.total = order.items.reduce((acc, item) => acc + (item.qty * item.price), 0);
   
-  // Save the updated order back to localStorage
+ 
   localStorage.setItem('orders', JSON.stringify(orders));
 
-  renderOrdersTable(); // Re-render table to reflect changes
+  renderOrdersTable(); 
+  
 }
 
 function removeOrder(orderIndex) {
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
-  orders.splice(orderIndex, 1);  // Remove the selected order
+  orders.splice(orderIndex, 1);  
   localStorage.setItem('orders', JSON.stringify(orders));
-  renderOrdersTable();  // Re-render table after removal
+  renderOrdersTable(); 
 }
 
 renderOrdersTable();
@@ -698,14 +724,14 @@ renderOrdersTable();
 
 function renderOrdersTable(filteredOrders) {
   const ordersTableBody = document.querySelector('#orders-table tbody');
-  ordersTableBody.innerHTML = '';  // Clear existing rows
+  ordersTableBody.innerHTML = ''; 
 
   const orders = filteredOrders || JSON.parse(localStorage.getItem('orders')) || [];
 
   orders.forEach((order, orderIndex) => {
     const row = document.createElement('tr');
 
-    // Render items as editable fields
+    
     const itemsHtml = order.items.map((item, itemIndex) => {
       return `
         <div class="order-item">
@@ -736,7 +762,7 @@ function renderOrdersTable(filteredOrders) {
     ordersTableBody.appendChild(row);
   });
 
-  // Add event listeners for editable fields (customer name and phone number)
+  
   document.querySelectorAll('.edit-customer-name').forEach(field => {
     field.addEventListener('input', (e) => {
       const orderIndex = e.target.getAttribute('data-order-index');
@@ -755,7 +781,7 @@ function renderOrdersTable(filteredOrders) {
     });
   });
 
-  // Add event listeners for editable item fields (item name, quantity, price)
+  
   document.querySelectorAll('.edit-item-name').forEach(field => {
     field.addEventListener('input', (e) => {
       const orderIndex = e.target.getAttribute('data-order-index');
@@ -802,5 +828,94 @@ function searchOrders() {
     alert('No orders found with the provided Order ID or Phone Number.');
   } else {
     renderOrdersTable(filteredOrders);  
+  }
+}
+
+
+
+function renderCustomersTable() {
+  const customersTableBody=document.querySelector('#customers-table tbody');
+  customersTableBody.innerHTML='';
+  const orders=JSON.parse(localStorage.getItem('orders'))||[];
+  const customersMap={};
+  orders.forEach(order=>{
+    if(!customersMap[order.phoneNumber]){
+      customersMap[order.phoneNumber]={
+        name:order.customerName,
+        phoneNumber:order.phoneNumber,
+        totalSpend:0
+      };
+    }
+    customersMap[order.phoneNumber].totalSpend+=order.total;
+  });
+  const customers=Object.values(customersMap);
+  customers.forEach((customer,index)=>{
+    const row=document.createElement('tr');
+    row.innerHTML=`
+      <td>
+        <input type="text" value="${customer.name}" class="edit-customer-name" data-index="${index}" />
+      </td>
+      <td>
+        <input type="text" value="${customer.phoneNumber}" class="edit-customer-phone" data-index="${index}" />
+      </td>
+      <td>$${customer.totalSpend.toFixed(2)}</td>
+      <td>
+        <button onclick="saveCustomerDetails(${index},'${customer.phoneNumber}')">Save</button>
+      </td>
+    `;
+    customersTableBody.appendChild(row);
+  });
+  localStorage.setItem('customersData',JSON.stringify(customers));
+}
+
+function saveCustomerDetails(index,oldPhoneNumber){
+  const customers=JSON.parse(localStorage.getItem('customersData'))||[];
+  const orders=JSON.parse(localStorage.getItem('orders'))||[];
+  const newName=document.querySelectorAll('.edit-customer-name')[index].value;
+  const newPhone=document.querySelectorAll('.edit-customer-phone')[index].value;
+  orders.forEach(order=>{
+    if(order.phoneNumber===oldPhoneNumber){
+      order.customerName=newName;
+      order.phoneNumber=newPhone;
+    }
+  });
+  localStorage.setItem('orders',JSON.stringify(orders));
+  alert('Customer details updated successfully!');
+  renderCustomersTable();
+}
+
+
+function searchCustomer() {
+  const searchInput = document.getElementById('customer-search-bar').value.trim();
+  const customersTableBody = document.querySelector('#customers-table tbody');
+
+  if (!searchInput) {
+    alert("Please enter a phone number to search.");
+    return;
+  }
+
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+  
+
+  const filteredCustomers = orders.filter(order => order.phoneNumber.includes(searchInput));
+
+  customersTableBody.innerHTML = '';
+
+  if (filteredCustomers.length > 0) {
+    filteredCustomers.forEach(order => {
+      const row = `
+        <tr>
+          <td>${order.customerName}</td>
+          <td>${order.phoneNumber}</td>
+          <td>$${order.total.toFixed(2)}</td>
+          <td>
+            <button onclick="editCustomer('${order.phoneNumber}')">Edit</button>
+          </td>
+        </tr>
+      `;
+      customersTableBody.insertAdjacentHTML('beforeend', row);
+    });
+  } else {
+    alert("No customer found with the entered phone number.");
   }
 }
