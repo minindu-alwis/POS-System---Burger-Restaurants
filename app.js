@@ -4,6 +4,9 @@ console.log("Minidu");
 const username="miniduminidu@gmail.com"
 const password="20040331";
 
+console.log(username + " -  UserName");
+console.log(password+ "  -  PassWord");
+
 function login(){
     let userinputemail=document.getElementById("email").value;
     let userinputpassword=document.getElementById("password").value;
