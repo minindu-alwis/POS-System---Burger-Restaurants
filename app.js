@@ -14,6 +14,7 @@ function login(){
 
         document.getElementById("root").innerHTML=mainburgerpage();
         renderMenuItems();
+        renderEditItemsTable();
 
     }else{
         alert("Password / Username Incorrect ");
@@ -52,16 +53,17 @@ function comp(){
 
 function mainburgerpage() {
     return `
+    <a href="#top" class="scroll-to-top" id="scroll-to-top">↑</a>
+    <div id="top">
          <div class="pos-system">
     <aside class="sidebar">
       <div class="sidebar-logo">FAVBurger</div>
       <nav class="navbar-menu">
     <a href="#" class="nav-item active">Home</a>
-    <a href="#remove" class="nav-item">Remove</a>
     <a href="#additems" class="nav-item">Add Items</a>
+    <a href="#edititems" class="nav-item">Edit Items</a>
     <a href="#" class="nav-item">Promos</a>
     <a href="#" class="nav-item">Settings</a>
-    <section class="completed-orders">
 </nav>
 
     </aside>
@@ -110,7 +112,7 @@ function mainburgerpage() {
 
 <div id="additems">
 <div id="item-creation-section" class="item-form">
-  <h2>Create Menu Item</h2>
+  <h2 style="margin-top: 16px;">Create Menu Item</h2>
   <input type="text" id="new-item-id" placeholder="Enter Burger ID">
   <input type="text" id="new-item-name" placeholder="Enter Item Name">
   <input type="number" id="new-item-price" placeholder="Enter Price">
@@ -120,7 +122,24 @@ function mainburgerpage() {
 
 </div>
 
-
+<div id="edititems">
+  <h2>Edit Item</h2>
+  <table id="items-table">
+    <thead>
+      <tr>
+        <th>Item ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Item rows will be populated here dynamically -->
+    </tbody>
+  </table>
+</div>
+</div>
     `;
 }
 let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
@@ -239,6 +258,7 @@ function addNewItem() {
       };
 
       reader.readAsDataURL(imageInput.files[0]); 
+      renderEditItemsTable();
   } else {
       alert("Please fill in all fields and upload an image.");
   }
@@ -324,3 +344,61 @@ function reding(){
   }
   
 }
+
+function renderEditItemsTable() {
+  const tableBody = document.querySelector('#items-table tbody');
+  tableBody.innerHTML = '';  
+  
+  menuItems.forEach((item, index) => {
+    const row = document.createElement('tr');
+    
+    row.innerHTML = `
+      <td><input type="text" class="edit-item-field" value="${item.id}" disabled /></td>
+      <td><input type="text" class="edit-item-field" value="${item.name}" /></td>
+      <td><input type="number" class="edit-item-field" value="${item.price}" /></td>
+      <td><input type="file" class="edit-item-field" /></td>
+      <td>
+        <button class="edit-item-btn" onClick="saveEditedItems()">Save</button>
+        <button class="remove-item-btn" onClick="removeItem(${index})">Remove</button>
+      </td>
+    `;
+    
+    tableBody.appendChild(row);
+  });
+}
+
+function saveEditedItems() {
+  const rows = document.querySelectorAll('#items-table tbody tr');
+  
+  rows.forEach((row, index) => {
+    const inputs = row.querySelectorAll('.edit-item-field');
+    const idInput = inputs[0];
+    const nameInput = inputs[1];
+    const priceInput = inputs[2];
+    const imageInput = inputs[3];
+    
+    if (idInput && nameInput && priceInput && imageInput) {
+      menuItems[index].name = nameInput.value;
+      menuItems[index].price = parseFloat(priceInput.value);
+      
+      if (imageInput.files.length > 0) {
+        const newImageUrl = URL.createObjectURL(imageInput.files[0]);
+        menuItems[index].image = newImageUrl;
+      }
+    }
+  });
+
+  renderMenuItems();
+  alert('Changes saved successfully!');
+}
+
+
+function removeItem(index) {
+  menuItems.splice(index, 1);
+
+  renderEditItemsTable();
+  alert('Item removed successfully!');
+  renderMenuItems();
+}
+
+
