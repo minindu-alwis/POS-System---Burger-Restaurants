@@ -15,6 +15,7 @@ function login(){
         document.getElementById("root").innerHTML=mainburgerpage();
         renderMenuItems();
         renderEditItemsTable();
+        renderOrdersTable();
 
     }else{
         alert("Password / Username Incorrect ");
@@ -62,7 +63,7 @@ function mainburgerpage() {
     <a href="#" class="nav-item active">Home</a>
     <a href="#additems" class="nav-item">Add Items</a>
     <a href="#edititems" class="nav-item">Edit Items</a>
-    <a href="#" class="nav-item">Promos</a>
+    <a href="#orders" class="nav-item">Orders</a>
     <a href="#" class="nav-item">Settings</a>
 </nav>
 
@@ -145,6 +146,44 @@ function mainburgerpage() {
   </table>
 </div>
 </div>
+
+
+<div id="orders">
+  <h2>All Orders</h2>
+
+  <!-- Search Section -->
+  <div class="search-section">
+    <input type="text" id="search-input" placeholder="Search by Order ID or Phone Number">
+    <button onclick="searchOrders()">Search</button>
+  </div>
+
+  <table id="orders-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer Name</th>
+        <th>Customer Phone</th>
+        <th>Order Items</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Orders will be dynamically added here -->
+    </tbody>
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
     `;
 }
 let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
@@ -487,6 +526,7 @@ function printBill() {
     return;
   }
   saveOrderToLocalStorage(customerName, phoneNumber);
+  renderOrdersTable();
   let billContent = `
     <div style="font-family: Arial, sans-serif; padding: 20px; width: 300px; margin: auto; text-align: center;">
       <h2 style="margin-bottom: 10px;">Mos Burger</h2>
@@ -539,4 +579,228 @@ function printBill() {
   document.getElementById('current-order-number').textContent = currentOrderNumber;
   document.getElementById('customer-name').value = '';
   document.getElementById('phone-number').value = '';
+}
+
+
+function renderOrdersTable() {
+  const ordersTableBody = document.querySelector('#orders-table tbody');
+  ordersTableBody.innerHTML = '';  // Clear existing rows
+
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+  orders.forEach((order, orderIndex) => {
+    const row = document.createElement('tr');
+
+    // Render items as editable fields
+    const itemsHtml = order.items.map((item, itemIndex) => {
+      return `
+        <div class="order-item">
+          <input type="text" value="${item.name}" class="edit-item-name" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+          <input type="number" value="${item.qty}" class="edit-item-qty" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+          <input type="number" value="${item.price}" class="edit-item-price" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+        </div>`;
+    }).join('');
+
+    row.innerHTML = `
+      <td>${order.id}</td>
+      <td>
+        <input type="text" value="${order.customerName}" class="edit-customer-name" data-order-index="${orderIndex}" />
+      </td>
+      <td>
+        <input type="text" value="${order.phoneNumber}" class="edit-customer-phone" data-order-index="${orderIndex}" />
+      </td>
+      <td>
+        ${itemsHtml}
+      </td>
+      <td>$${order.total.toFixed(2)}</td>
+      <td>
+        <button onclick="saveOrder(${orderIndex})">Save Changes</button>
+        <button onclick="removeOrder(${orderIndex})">Remove</button>
+      </td>
+    `;
+
+    ordersTableBody.appendChild(row);
+  });
+
+  // Add event listeners for editable fields (customer name and phone number)
+  document.querySelectorAll('.edit-customer-name').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].customerName = e.target.value;
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+
+  document.querySelectorAll('.edit-customer-phone').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].phoneNumber = e.target.value;
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+
+  // Add event listeners for editable item fields (item name, quantity, price)
+  document.querySelectorAll('.edit-item-name').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const itemIndex = e.target.getAttribute('data-item-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].items[itemIndex].name = e.target.value;
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+
+  document.querySelectorAll('.edit-item-qty').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const itemIndex = e.target.getAttribute('data-item-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].items[itemIndex].qty = parseInt(e.target.value);
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+
+  document.querySelectorAll('.edit-item-price').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const itemIndex = e.target.getAttribute('data-item-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].items[itemIndex].price = parseFloat(e.target.value);
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+}
+
+function saveOrder(orderIndex) {
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+  const order = orders[orderIndex];
+
+  // Update the order total
+  order.total = order.items.reduce((acc, item) => acc + (item.qty * item.price), 0);
+  
+  // Save the updated order back to localStorage
+  localStorage.setItem('orders', JSON.stringify(orders));
+
+  renderOrdersTable(); // Re-render table to reflect changes
+}
+
+function removeOrder(orderIndex) {
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+  orders.splice(orderIndex, 1);  // Remove the selected order
+  localStorage.setItem('orders', JSON.stringify(orders));
+  renderOrdersTable();  // Re-render table after removal
+}
+
+renderOrdersTable();
+
+
+function renderOrdersTable(filteredOrders) {
+  const ordersTableBody = document.querySelector('#orders-table tbody');
+  ordersTableBody.innerHTML = '';  // Clear existing rows
+
+  const orders = filteredOrders || JSON.parse(localStorage.getItem('orders')) || [];
+
+  orders.forEach((order, orderIndex) => {
+    const row = document.createElement('tr');
+
+    // Render items as editable fields
+    const itemsHtml = order.items.map((item, itemIndex) => {
+      return `
+        <div class="order-item">
+          <input type="text" value="${item.name}" class="edit-item-name" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+          <input type="number" value="${item.qty}" class="edit-item-qty" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+          <input type="number" value="${item.price}" class="edit-item-price" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+        </div>`;
+    }).join('');
+
+    row.innerHTML = `
+      <td>${order.id}</td>
+      <td>
+        <input type="text" value="${order.customerName}" class="edit-customer-name" data-order-index="${orderIndex}" />
+      </td>
+      <td>
+        <input type="text" value="${order.phoneNumber}" class="edit-customer-phone" data-order-index="${orderIndex}" />
+      </td>
+      <td>
+        ${itemsHtml}
+      </td>
+      <td>$${order.total.toFixed(2)}</td>
+      <td>
+        <button onclick="saveOrder(${orderIndex})">Save Changes</button>
+        <button onclick="removeOrder(${orderIndex})">Remove</button>
+      </td>
+    `;
+
+    ordersTableBody.appendChild(row);
+  });
+
+  // Add event listeners for editable fields (customer name and phone number)
+  document.querySelectorAll('.edit-customer-name').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].customerName = e.target.value;
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+
+  document.querySelectorAll('.edit-customer-phone').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].phoneNumber = e.target.value;
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+
+  // Add event listeners for editable item fields (item name, quantity, price)
+  document.querySelectorAll('.edit-item-name').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const itemIndex = e.target.getAttribute('data-item-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].items[itemIndex].name = e.target.value;
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+
+  document.querySelectorAll('.edit-item-qty').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const itemIndex = e.target.getAttribute('data-item-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].items[itemIndex].qty = parseInt(e.target.value);
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+
+  document.querySelectorAll('.edit-item-price').forEach(field => {
+    field.addEventListener('input', (e) => {
+      const orderIndex = e.target.getAttribute('data-order-index');
+      const itemIndex = e.target.getAttribute('data-item-index');
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders[orderIndex].items[itemIndex].price = parseFloat(e.target.value);
+      localStorage.setItem('orders', JSON.stringify(orders));
+    });
+  });
+}
+
+
+function searchOrders() {
+  const searchInput = document.getElementById('search-input').value.toLowerCase();
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+  
+  const filteredOrders = orders.filter(order => 
+    order.id.toLowerCase().includes(searchInput) || 
+    order.phoneNumber.includes(searchInput)
+  );
+
+  if (filteredOrders.length === 0) {
+    alert('No orders found with the provided Order ID or Phone Number.');
+  } else {
+    renderOrdersTable(filteredOrders);  
+  }
 }
