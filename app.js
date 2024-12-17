@@ -13,6 +13,7 @@ function login(){
     if(userinputemail==username && userinputpassword==password){
 
         document.getElementById("root").innerHTML=mainburgerpage();
+        renderMenuItems();
 
     }else{
         alert("Password / Username Incorrect ");
@@ -22,6 +23,7 @@ function login(){
 
 
 document.getElementById("root").innerHTML=comp();
+
 
 function comp(){
     return(
@@ -52,201 +54,38 @@ function mainburgerpage() {
     return `
          <div class="pos-system">
     <aside class="sidebar">
-      <div class="sidebar-logo">POSFood</div>
-      <nav class="sidebar-menu">
-        <a href="#" class="menu-item active">Home</a>
-        <a href="#remove" class="menu-item">Remove the Order</a>
-        <a href="#" class="menu-item">History</a>
-        <a href="#" class="menu-item">Promos</a>
-        <a href="#" class="menu-item">Settings</a>
-        <section class="completed-orders">
-  
-      </nav>
+      <div class="sidebar-logo">FAVBurger</div>
+      <nav class="navbar-menu">
+    <a href="#" class="nav-item active">Home</a>
+    <a href="#remove" class="nav-item">Remove</a>
+    <a href="#additems" class="nav-item">Add Items</a>
+    <a href="#" class="nav-item">Promos</a>
+    <a href="#" class="nav-item">Settings</a>
+    <section class="completed-orders">
+</nav>
+
     </aside>
-    <main class="main-content">
-      <header class="header">
-        <h1 class="restaurant-name">Mos Burger</h1>
-        <span class="date">August 21, 2022</span>
-        <input type="text" class="search-bar" placeholder="Search menu here..." />
-      </header>
-      <section class="categories">
-        <button class="category-tab active">Burger</button>
-        <button class="category-tab">Noodles</button>
-        <button class="category-tab">Drinks</button>
-        <button class="category-tab">Desserts</button>
-      </section>
+
+  <main class="main-content">
+  <header class="header">
+    <h1 class="restaurant-name">Mos Burger</h1>
+    <input type="text" class="search-bar" id="search-bar" placeholder="Search menu by ID..." />
+    <button class="search-btn" id="search-btn" onClick="reding()">Search</button>
+  </header>
+  <section class="categories">
+    <button class="category-tab active">Burger</button>
+    <button class="category-tab">Noodles</button>
+    <button class="category-tab">Drinks</button>
+    <button class="category-tab">Desserts</button>
+  </section>
       <section class="menu-grid">
         <!-- Menu items -->
-        <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
+        
 
 
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
 
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
 
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
 
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-
-         <div class="menu-item" onclick="addToOrder('Original Burger', 5.99)">
-          <img src="img/111.jpg" alt="Original Burger" class="menu-img" />
-          <h3 class="menu-title">Original Burger</h3>
-          <p class="menu-price">$5.99</p>
-          <p class="menu-stock">11 items</p>
-        </div>
-        <div class="menu-item" onclick="addToOrder('Double Burger', 10.99)">
-          <img src="img/111.jpg" alt="Double Burger" class="menu-img" />
-          <h3 class="menu-title">Double Burger</h3>
-          <p class="menu-price">$10.99</p>
-          <p class="menu-stock">8 items</p>
-        </div>
-        <!-- Add more menu items -->
       </section>
     </main>
     
@@ -269,342 +108,219 @@ function mainburgerpage() {
 </div>
 
 
+<div id="additems">
+<div id="item-creation-section" class="item-form">
+  <h2>Create Menu Item</h2>
+  <input type="text" id="new-item-id" placeholder="Enter Burger ID">
+  <input type="text" id="new-item-name" placeholder="Enter Item Name">
+  <input type="number" id="new-item-price" placeholder="Enter Price">
+  <input type="file" id="new-item-image" accept="image/*">
+  <button type="button" onclick="addNewItem()">Add Menu Item</button>
+</div>
 
-
-
-  <div id="remove">
-  <section class="completed-orders">
-    <h2>Completed Orders</h2>
-    <input type="text" id="search-input" placeholder="Enter order number or phone number">
-    <button onclick="searchOrder()">Search</button>
-    <button id="refresh-orders-btn" onclick="renderCompletedOrders()">Refresh</button>
-    <div id="completed-orders-list">
-      <!-- Completed orders details will be dynamically displayed here -->
-    </div>
-  </section>
 </div>
 
 
     `;
 }
+let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
+  { id: "B1001", name: "Classic Burger (Large)", price: 750.00, image: "img/111.jpg" },
+  { id: "B1002", name: "Classic Burger (Regular)", price: 1500.00, image: "img/111.jpg" },
+  { id: "B1003", name: "Turkey Burger", price: 1600.00, image: "img/111.jpg" },
+  { id: "B1004", name: "Chicken Burger (Large)", price: 1400.00, image: "img/111.jpg" },
+  { id: "B1005", name: "Chicken Burger (Regular)", price: 800.00, image: "img/111.jpg" },
+  { id: "B1006", name: "Cheese Burger (Large)", price: 1000.00, image: "img/111.jpg" },
+  { id: "B1007", name: "Cheese Burger (Regular)", price: 600.00, image: "img/111.jpg" },
+  { id: "B1008", name: "Bacon Burger", price: 650.00, image: "img/111.jpg" },
+  { id: "B1009", name: "Shawarma Burger", price: 800.00, image: "img/111.jpg" },
+  { id: "B1010", name: "Olive Burger", price: 1800.00, image: "img/111.jpg" },
+  { id: "B1012", name: "Double-Cheese Burger", price: 1250.00, image: "img/111.jpg" },
+  { id: "B1013", name: "Crispy Chicken Burger (Regular)", price: 1200.00, image: "img/111.jpg" },
+  { id: "B1014", name: "Crispy Chicken Burger (Large)", price: 1600.00, image: "img/111.jpg" },
+  { id: "B1015", name: "Paneer Burger", price: 900.00, image: "img/111.jpg" },
+  { id: "B1016", name: "Crispy Chicken Submarine (Large)", price: 2000.00, image: "img/111.jpg" },
+  { id: "B1017", name: "Crispy Chicken Submarine (Regular)", price: 1500.00, image: "img/111.jpg" },
+  { id: "B1018", name: "Chicken Submarine (Large)", price: 1800.00, image: "img/111.jpg" },
+  { id: "B1019", name: "Chicken Submarine (Regular)", price: 1400.00, image: "img/111.jpg" },
+  { id: "B1020", name: "Grinder Submarine", price: 2300.00, image: "img/111.jpg" },
+  { id: "B1021", name: "Cheese Submarine", price: 2200.00, image: "img/111.jpg" },
+  { id: "B1022", name: "Double Cheese n Chicken Submarine", price: 1900.00, image: "img/111.jpg" },
+  { id: "B1023", name: "Special Horgie Submarine", price: 2800.00, image: "img/111.jpg" },
+  { id: "B1024", name: "MOS Special Submarine", price: 3000.00, image: "img/111.jpg" },
+  { id: "B1025", name: "Steak Fries (Large)", price: 1200.00, image: "img/111.jpg" },
+  { id: "B1026", name: "Steak Fries (Medium)", price: 600.00, image: "img/111.jpg" },
+  { id: "B1027", name: "French Fries (Large)", price: 800.00, image: "img/111.jpg" },
+  { id: "B1028", name: "French Fries (Medium)", price: 650.00, image: "img/111.jpg" },
+  { id: "B1029", name: "French Fries (Small)", price: 450.00, image: "img/111.jpg" },
+  { id: "B1030", name: "Sweet Potato Fries (Large)", price: 600.00, image: "img/111.jpg" },
+  { id: "B1031", name: "Chicken n Cheese Pasta", price: 1600.00, image: "img/111.jpg" },
+  { id: "B1032", name: "Chicken Penne Pasta", price: 1700.00, image: "img/111.jpg" },
+  { id: "B1033", name: "Ground Turkey Pasta Bake", price: 2900.00, image: "img/111.jpg" },
+  { id: "B1034", name: "Creamy Shrimp Pasta", price: 2000.00, image: "img/111.jpg" },
+  { id: "B1035", name: "Lemon Butter Pasta", price: 1950.00, image: "img/111.jpg" },
+  { id: "B1036", name: "Tagliatelle Pasta", price: 2400.00, image: "img/111.jpg" },
+  { id: "B1037", name: "Baked Ravioli", price: 2000.00, image: "img/111.jpg" },
+  { id: "B1038", name: "Fried Chicken (Small)", price: 1200.00, image: "img/111.jpg" },
+  { id: "B1039", name: "Fried Chicken (Regular)", price: 2300.00, image: "img/111.jpg" },
+  { id: "B1040", name: "Fried Chicken (Large)", price: 3100.00, image: "img/111.jpg" },
+  { id: "B1041", name: "Hot Wings (Large)", price: 2400.00, image: "img/111.jpg" },
+  { id: "B1042", name: "Devilled Chicken (Large)", price: 900.00, image: "img/111.jpg" },
+  { id: "B1043", name: "BBQ Chicken (Regular)", price: 2100.00, image: "img/111.jpg" },
+  { id: "B1044", name: "Pepsi (330ml)", price: 990.00, image: "img/111.jpg" },
+  { id: "B1045", name: "Coca-Cola (330ml)", price: 1230.00, image: "img/111.jpg" },
+  { id: "B1046", name: "Sprite (330ml)", price: 1500.00, image: "img/111.jpg" },
+  { id: "B1047", name: "Mirinda (330ml)", price: 850.00, image: "img/111.jpg" }
+];
 
 
+// Debug log to check menuItems before rendering
+console.log("Initial menu items:", menuItems);
 
-// Initialize orders array and load from local storage
-let orders = JSON.parse(localStorage.getItem('currentOrder')) || [];
-let completedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
-let currentOrderNumber = parseInt(localStorage.getItem('orderNumber')) || 1;
+function renderMenuItems() {
+  console.log("Rendering menu items:", menuItems);
 
-// Function to update the displayed order number
-function updateOrderNumberDisplay() {
-  const orderNumberElement = document.getElementById('current-order-number');
-  if (orderNumberElement) {
-    orderNumberElement.innerText = `ODR${currentOrderNumber.toString().padStart(4, '0')}`;
+  if (!Array.isArray(menuItems)) {
+    console.error("menuItems is not an array or is undefined");
+    return;
   }
-}
 
-// Function to add item to the order
-function addToOrder(itemName, itemPrice) {
-  const newItem = { name: itemName, price: itemPrice };
-  orders.push(newItem);
-  saveCurrentOrder();
-  renderOrder();
-  updateTotal();
-}
+  const menuGrid = document.querySelector('.menu-grid');
+  if (!menuGrid) {
+    console.error("menu-grid container not found");
+    return;
+  }
 
-// Function to save the current order to local storage
-function saveCurrentOrder() {
-  localStorage.setItem('currentOrder', JSON.stringify(orders));
-}
+  const fragment = document.createDocumentFragment();
 
-// Function to save completed orders to local storage
-function saveCompletedOrders() {
-  localStorage.setItem('completedOrders', JSON.stringify(completedOrders));
-}
+  menuItems.forEach((item) => {
+    const menuItemElement = document.createElement('div');
+    menuItemElement.classList.add('menu-item');
+    menuItemElement.setAttribute('onclick', `addToOrder('${item.name}', ${item.price})`);
 
-// Function to save order number
-function saveOrderNumber() {
-  localStorage.setItem('orderNumber', currentOrderNumber.toString());
-}
-
-// Function to render orders in the UI
-function renderOrder() {
-  const orderList = document.getElementById('order-list');
-  orderList.innerHTML = '';
-
-  orders.forEach((order, index) => {
-    const orderItem = document.createElement('div');
-    orderItem.classList.add('order-item');
-    orderItem.innerHTML = `
-      <p class="item-name">${order.name}</p>
-      <span class="item-price">$${order.price.toFixed(2)}</span>
-      <button class="remove-btn" onclick="removeOrder(${index})">Remove</button>
+    menuItemElement.innerHTML = `
+      <img src="${item.image}" alt="${item.name}" class="menu-img" />
+      <h3 class="menu-title">${item.name}</h3>
+      <p class="menu-price">$${item.price.toFixed(2)}</p>
     `;
-    orderList.appendChild(orderItem);
+
+    fragment.appendChild(menuItemElement);
   });
+
+  menuGrid.innerHTML = '';
+  menuGrid.appendChild(fragment);
 }
 
-// Function to remove an item from the order
-function removeOrder(index) {
-  orders.splice(index, 1);
-  saveCurrentOrder();
-  renderOrder();
-  updateTotal();
-}
 
-// Function to update totals
-function updateTotal() {
-  const subtotal = orders.reduce((acc, item) => acc + item.price, 0);
-  const taxRate = 0.1; // 10% tax
-  const tax = subtotal * taxRate;
-  const total = subtotal + tax;
+function addNewItem() {
+  const id = document.getElementById('new-item-id').value.trim();
+  const name = document.getElementById('new-item-name').value.trim();
+  const price = parseFloat(document.getElementById('new-item-price').value);
+  const imageInput = document.getElementById('new-item-image');
 
-  document.getElementById('subtotal').innerText = `$${subtotal.toFixed(2)}`;
-  document.getElementById('tax').innerText = `$${tax.toFixed(2)}`;
-  document.getElementById('total').innerText = `$${total.toFixed(2)}`;
-}
-// Function to complete the current order
-function completeOrder() {
-    if (orders.length === 0) {
-      alert('No items in the order to complete!');
-      return;
-    }
-  
-    // Get the phone number from the input field
-    const phoneNumberInput = document.getElementById('phone-number');
-    const customerPhone = phoneNumberInput.value.trim();
-  
-    if (!customerPhone) {
-      alert('Phone number is required to complete the order!');
-      return;
-    }
-  
-    // Save current order to completed orders
-    const orderData = {
-      orderNumber: `ODR${currentOrderNumber.toString().padStart(4, '0')}`,
-      customerPhone: customerPhone,
-      items: orders,
-      timestamp: new Date().toLocaleString(),
-    };
-    completedOrders.push(orderData);
-  
-    // Save to local storage
-    saveCompletedOrders();
-  
-    // Increment order number and save
-    currentOrderNumber++;
-    saveOrderNumber();
-  
-    // Update displayed order number
-    updateOrderNumberDisplay();
-  
-    // Reset current order
-    orders = [];
-    saveCurrentOrder();
-    renderOrder();
-    updateTotal();
-  
-    // Clear phone number field
-    phoneNumberInput.value = '';
-  
-    alert(`Order ${orderData.orderNumber} completed for ${customerPhone}!`);
-  
-    // Reset background or text color (if changed)
-    document.body.style.backgroundColor = '#ffffff'; // Example reset
+  // Validate the inputs
+  if (id && name && price && imageInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+          const newItem = {
+              id: id,               
+              name: name,
+              price: price,
+              image: e.target.result 
+          };
+
+          menuItems.push(newItem); 
+          localStorage.setItem('menuItems', JSON.stringify(menuItems)); 
+          renderMenuItems(); 
+
+          document.getElementById('new-item-id').value = '';
+          document.getElementById('new-item-name').value = '';
+          document.getElementById('new-item-price').value = '';
+          document.getElementById('new-item-image').value = '';
+      };
+
+      reader.readAsDataURL(imageInput.files[0]); 
+  } else {
+      alert("Please fill in all fields and upload an image.");
   }
-  
-  // Function to print bill (simulate)
-  function printBill() {
-    completeOrder();
-  }
-  
-
-
-
-
-
-
-  //remove part
-// Function to render completed orders in a table format
-function renderCompletedOrders() {
-    const completedOrdersList = document.getElementById('completed-orders-list');
-    completedOrdersList.innerHTML = ''; // Clear the list before rendering
-
-    if (completedOrders.length === 0) {
-      completedOrdersList.innerHTML = '<p>No completed orders found!</p>';
-      return;
-    }
-
-    // Create the table structure
-    const table = document.createElement('table');
-    table.classList.add('completed-orders-table');
-
-    // Add the table header
-    const tableHeader = `
-      <thead>
-        <tr>
-          <th>Order Number</th>
-          <th>Phone Number</th>
-          <th>Timestamp</th>
-          <th>Items</th>
-          <th>Total</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-    `;
-    table.innerHTML = tableHeader;
-
-    // Add the table body with completed orders
-    const tableBody = document.createElement('tbody');
-    
-    let grandTotal = 0; // Variable to store the total of all orders
-
-    completedOrders.forEach((order, index) => {
-      const row = document.createElement('tr');
-
-      // Calculate total price for the order
-      const totalPrice = order.items.reduce((acc, item) => acc + item.price, 0).toFixed(2);
-      grandTotal += parseFloat(totalPrice); // Add the order total to the grand total
-
-      // Create a row for each completed order
-      row.innerHTML = `
-        <td>${order.orderNumber}</td>
-        <td>${order.customerPhone}</td>
-        <td>${order.timestamp}</td>
-        <td>
-          <ul>
-            ${order.items.map(item => `<li>${item.name} - $${item.price.toFixed(2)}</li>`).join('')}
-          </ul>
-        </td>
-        <td>$${totalPrice}</td>
-        <td><button class="remove-completed-btn" onclick="removeCompletedOrder(${index})">Remove</button></td>
-      `;
-
-      tableBody.appendChild(row);
-    });
-
-    // Append the body to the table
-    table.appendChild(tableBody);
-
-    // Append a row for the grand total at the end of the table
-    const grandTotalRow = document.createElement('tr');
-    grandTotalRow.innerHTML = `
-      <td colspan="4" style="text-align: right;"><strong>Grand Total</strong></td>
-      <td><strong>$${grandTotal.toFixed(2)}</strong></td>
-      <td></td>
-    `;
-    table.appendChild(grandTotalRow);
-
-    // Append the table to the completed orders list
-    completedOrdersList.appendChild(table);
 }
 
-// Function to remove a completed order
-function removeCompletedOrder(index) {
-    if (confirm('Are you sure you want to remove this order?')) {
-        // Remove the order from the array
-        completedOrders.splice(index, 1);
+function reding(){
 
-        // Update the local storage if you're using it (optional)
-        // localStorage.setItem('completedOrders', JSON.stringify(completedOrders));
-
-        // Re-render the completed orders list
-        renderCompletedOrders();
-
-        alert('Order removed successfully!');
-    }
-}
-  // Function to search for a specific order by number
-// Function to search for a specific order by order number or phone number (ignoring case)
-// Function to search for a specific order by order number or phone number (ignoring case)
-function searchOrder() {
-    const searchInput = document.getElementById('search-input').value.trim().toLowerCase(); // Convert input to lowercase
-    const completedOrdersList = document.getElementById('completed-orders-list');
+  document.getElementById('search-btn').addEventListener('click', function() {
+    const searchQuery = document.getElementById('search-bar').value.trim().toLowerCase();
+    render(searchQuery);
+  });
   
-    if (!searchInput) {
-      alert('Please enter an order number or phone number!');
+  function render(searchQuery = '') {
+    console.log("Rendering menu items:", menuItems);
+  
+    // Check if menuItems is an array
+    if (!Array.isArray(menuItems)) {
+      console.error("menuItems is not an array or is undefined");
       return;
     }
   
-    // Find orders based on the order number or phone number, ignoring case
-    const orders = completedOrders.filter(o => 
-      o.orderNumber.toLowerCase().includes(searchInput) || o.customerPhone.toLowerCase().includes(searchInput)
-    ); // Compare both order number and phone number
-  
-    if (orders.length === 0) {
-      completedOrdersList.innerHTML = '<p>Order not found!</p>';
+    // Check if the menuItems array is empty
+    if (menuItems.length === 0) {
+      console.error("menuItems array is empty");
       return;
     }
   
-    // Render the found orders
-    renderFoundOrders(orders);
-}
-
-// Function to render the found orders in a table
-function renderFoundOrders(orders) {
-    const completedOrdersList = document.getElementById('completed-orders-list');
-    completedOrdersList.innerHTML = ''; // Clear previous results
+    // Get the container where the menu items will be displayed
+    const menuGrid = document.querySelector('.menu-grid');
+    if (!menuGrid) {
+      console.error("menu-grid container not found");
+      return;
+    }
   
-    // Create the table structure
-    const table = document.createElement('table');
-    table.classList.add('completed-orders-table');
+    // Create a fragment to append all items efficiently
+    const fragment = document.createDocumentFragment();
+    let itemsFound = false;
   
-    // Add the table header
-    const tableHeader = `
-      <thead>
-        <tr>
-          <th>Order Number</th>
-          <th>Phone Number</th>
-          <th>Timestamp</th>
-          <th>Items</th>
-          <th>Total</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-    `;
-    table.innerHTML = tableHeader;
+    // Iterate through each item in the menuItems array
+    menuItems.forEach((item) => {
+      // Check if the searchQuery matches the item ID or name (case-insensitive)
+      if (searchQuery !== '') {
+        if (item.id.toLowerCase().includes(searchQuery) || item.name.toLowerCase().includes(searchQuery)) {
+          itemsFound = true;
   
-    // Add the table body with found orders
-    const tableBody = document.createElement('tbody');
-    
-    let grandTotal = 0; // Variable to store the total of all orders
+          const menuItemElement = document.createElement('div');
+          menuItemElement.classList.add('menu-item');
+          menuItemElement.setAttribute('onclick', `addToOrder('${item.name}', ${item.price})`);
   
-    orders.forEach((order, index) => {
-      const row = document.createElement('tr');
+          menuItemElement.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="menu-img" />
+            <h3 class="menu-title">${item.name}</h3>
+            <p class="menu-price">$${item.price.toFixed(2)}</p>
+          `;
   
-      // Calculate total price for the order
-      const totalPrice = order.items.reduce((acc, item) => acc + item.price, 0).toFixed(2);
-      grandTotal += parseFloat(totalPrice); // Add the order total to the grand total
+          fragment.appendChild(menuItemElement);
+        }
+      } else {
+        // If no search query is provided, display all items
+        itemsFound = true;
   
-      // Create a row for each completed order
-      row.innerHTML = `
-        <td>${order.orderNumber}</td>
-        <td>${order.customerPhone}</td>
-        <td>${order.timestamp}</td>
-        <td>
-          <ul>
-            ${order.items.map(item => `<li>${item.name} - $${item.price.toFixed(2)}</li>`).join('')}
-          </ul>
-        </td>
-        <td>$${totalPrice}</td>
-        <td><button class="remove-completed-btn" onclick="removeCompletedOrder(${index})">Remove</button></td>
-      `;
+        const menuItemElement = document.createElement('div');
+        menuItemElement.classList.add('menu-item');
+        menuItemElement.setAttribute('onclick', `addToOrder('${item.name}', ${item.price})`);
   
-      tableBody.appendChild(row);
+        menuItemElement.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="menu-img" />
+          <h3 class="menu-title">${item.name}</h3>
+          <p class="menu-price">$${item.price.toFixed(2)}</p>
+        `;
+  
+        fragment.appendChild(menuItemElement);
+      }
     });
   
-    // Append the body to the table
-    table.appendChild(tableBody);
+    // If no items are found based on the search query
+    if (!itemsFound) {
+      menuGrid.innerHTML = '<p style="color:red;">No items found</p>'; 
+    } else {
+      menuGrid.innerHTML = '';  // Clear current menu items
+      menuGrid.appendChild(fragment);  // Add filtered items to the grid
+    }
+  }
   
-    // Append a row for the grand total at the end of the table
-    const grandTotalRow = document.createElement('tr');
-    grandTotalRow.innerHTML = `
-      <td colspan="4" style="text-align: right;"><strong>Grand Total</strong></td>
-      <td><strong>$${grandTotal.toFixed(2)}</strong></td>
-      <td></td>
-    `;
-    table.appendChild(grandTotalRow);
-  
-    // Append the table to the completed orders list
-    completedOrdersList.appendChild(table);
 }
