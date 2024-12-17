@@ -547,3 +547,103 @@ body:has(:not(:root):not(#top)) .scroll-to-top {
   display: block;
 }
 
+
+.order-summary {
+  max-width: 400px;
+  margin: 20px auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-title {
+  text-align: center;
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.order-actions {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.order-total {
+  margin-top: 20px;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.order-total p {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.print-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #28a745;
+  color: #fff;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.print-btn:hover {
+  background-color: #218838;
+}
+
+.current-order {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: #666;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-actions {
+  margin: 10px 0;
+}
+
+.order-actions label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.order-actions input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+

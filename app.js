@@ -91,22 +91,27 @@ function mainburgerpage() {
       </section>
     </main>
     
-    <aside class="order-summary">
-      <h2 class="order-title">Order</h2>
-      <div class="order-actions">
-  <label for="phone-number">Customer Phone Number:</label>
-  <input type="text" id="phone-number" placeholder="Enter phone number">
-</div>
-     <div id="order-list"></div>
-<div class="order-total">
-  <p class="subtotal">Sub Total: <span id="subtotal">$0.00</span></p>
-  <p class="tax">Tax (10%): <span id="tax">$0.00</span></p>
-  <p class="total">Total: <span id="total">$0.00</span></p>
-</div>
-<div class="order-info">
-  <p class="current-order">Order Number: <span id="current-order-number">ODR0001</span></p>
-</div>
-<button class="print-btn" onclick="printBill()">Print Bill</button>
+   <aside class="order-summary">
+  <h2 class="order-title">Order</h2>
+  <div class="order-actions">
+    <label for="customer-name">Customer Name:</label>
+    <input type="text" id="customer-name" placeholder="Enter customer name">
+  </div>
+  <div class="order-actions">
+    <label for="phone-number">Customer Phone Number:</label>
+    <input type="text" id="phone-number" placeholder="Enter phone number">
+  </div>
+  <div id="order-list"></div>
+  <div class="order-total">
+    <p class="subtotal">Sub Total: <span id="subtotal">$0.00</span></p>
+    <p class="total">Total: <span id="total">$0.00</span></p>
+  </div>
+  <div class="order-info">
+    <p class="current-order">Order Number: <span id="current-order-number">ODR0001</span></p>
+  </div>
+  <button class="print-btn" onclick="printBill()">Print Bill</button>
+</aside>
+
 </div>
 
 
@@ -401,4 +406,137 @@ function removeItem(index) {
   renderMenuItems();
 }
 
+let orderItems = [];
+let currentOrderNumber = getNextOrderNumber();
 
+// Function to get the next Order Number from local storage
+function getNextOrderNumber() {
+  const lastOrderId = localStorage.getItem('lastOrderId') || 'ODR00000';
+  const lastNumber = parseInt(lastOrderId.replace('ODR', ''), 10);
+  return `ODR${String(lastNumber + 1).padStart(5, '0')}`;
+}
+
+// Function to add burger to the order
+function addToOrder(name, price) {
+  const existingItem = orderItems.find(item => item.name === name);
+
+  if (existingItem) {
+    existingItem.qty += 1; // Increase quantity
+  } else {
+    orderItems.push({ name, price, qty: 1 }); // Add new item to the list
+  }
+
+  updateOrderList();
+}
+
+// Function to update the order list UI and calculate totals
+function updateOrderList() {
+  const orderList = document.getElementById('order-list');
+  const subtotalElement = document.getElementById('subtotal');
+  const totalElement = document.getElementById('total');
+
+  let subtotal = 0;
+
+  orderList.innerHTML = '';
+
+  orderItems.forEach(item => {
+    const itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+
+    const orderItemElement = document.createElement('div');
+    orderItemElement.classList.add('order-item');
+    orderItemElement.innerHTML = `
+      <p>${item.name} x${item.qty} - $${itemTotal.toFixed(2)}</p>
+    `;
+    orderList.appendChild(orderItemElement);
+  });
+
+  subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+  totalElement.textContent = `$${subtotal.toFixed(2)}`;
+}
+
+// Function to save the current order to local storage
+function saveOrderToLocalStorage(customerName, phoneNumber) {
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+  const order = {
+    id: currentOrderNumber,
+    customerName: customerName || 'N/A', // Save customer name
+    phoneNumber: phoneNumber || 'N/A',  // Save phone number
+    items: orderItems,
+    subtotal: orderItems.reduce((acc, item) => acc + item.price * item.qty, 0),
+    total: orderItems.reduce((acc, item) => acc + item.price * item.qty, 0),
+  };
+
+  orders.push(order);
+  localStorage.setItem('orders', JSON.stringify(orders));
+
+  // Update last Order ID
+  localStorage.setItem('lastOrderId', currentOrderNumber);
+  console.log(orders);
+}
+
+
+
+function printBill() {
+  const customerName = document.getElementById('customer-name').value.trim();
+  const phoneNumber = document.getElementById('phone-number').value.trim();
+
+  if (!customerName || !phoneNumber) {
+    alert('Please enter the customer name and phone number before printing the bill.');
+    return;
+  }
+  saveOrderToLocalStorage(customerName, phoneNumber);
+  let billContent = `
+    <div style="font-family: Arial, sans-serif; padding: 20px; width: 300px; margin: auto; text-align: center;">
+      <h2 style="margin-bottom: 10px;">Mos Burger</h2>
+      <p>Order Number: <strong>${currentOrderNumber}</strong></p>
+      <p>Customer Name: <strong>${customerName}</strong></p>
+      <p>Customer Phone: <strong>${phoneNumber}</strong></p>
+      <hr>
+      <div style="text-align: left; margin-top: 10px;">
+        <h3>Order Summary</h3>
+  `;
+
+  let subtotal = 0;
+  orderItems.forEach(item => {
+    const itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+    billContent += `
+      <p>${item.name} x${item.qty} - $${itemTotal.toFixed(2)}</p>
+    `;
+  });
+
+  billContent += `
+        <hr>
+        <p><strong>Sub Total:</strong> $${subtotal.toFixed(2)}</p>
+        <p><strong>Total:</strong> $${subtotal.toFixed(2)}</p>
+      </div>
+    </div>
+  `;
+
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Order Bill</title>
+      </head>
+      <body>
+        ${billContent}
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.print();
+
+  // Save order to local storage
+  
+
+  // Clear form and reset order
+  orderItems = [];
+  currentOrderNumber = getNextOrderNumber();
+  updateOrderList();
+  document.getElementById('current-order-number').textContent = currentOrderNumber;
+  document.getElementById('customer-name').value = '';
+  document.getElementById('phone-number').value = '';
+}
