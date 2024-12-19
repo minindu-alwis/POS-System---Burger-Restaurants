@@ -267,39 +267,20 @@ let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [
 console.log("Initial menu items:", menuItems);
 
 function renderMenuItems() {
-  console.log("Rendering menu items:", menuItems);
-
-  if (!Array.isArray(menuItems)) {
-    console.error("menuItems is not an array or is undefined");
-    return;
-  }
-
   const menuGrid = document.querySelector('.menu-grid');
-  if (!menuGrid) {
-    console.error("menu-grid container not found");
-    return;
-  }
+  menuGrid.innerHTML = ''; 
 
-  const fragment = document.createDocumentFragment();
-
-  menuItems.forEach((item) => {
-    const menuItemElement = document.createElement('div');
-    menuItemElement.classList.add('menu-item');
-    menuItemElement.setAttribute('onclick', `addToOrder('${item.name}', ${item.price})`);
-
-    menuItemElement.innerHTML = `
-      <img src="${item.image}" alt="${item.name}" class="menu-img" />
-      <h3 class="menu-title">${item.name}</h3>
-      <p class="menu-price">$${item.price.toFixed(2)}</p>
+  menuItems.forEach(item => {
+    const menuItemHTML = `
+      <div class="menu-item" onclick="addToOrder('${item.name}', ${item.price})">
+        <img src="${item.image}" alt="${item.name}" class="menu-img" />
+        <h3 class="menu-title">${item.name}</h3>
+        <p class="menu-price">$${item.price.toFixed(2)}</p>
+      </div>
     `;
-
-    fragment.appendChild(menuItemElement);
+    menuGrid.innerHTML += menuItemHTML; 
   });
-
-  menuGrid.innerHTML = '';
-  menuGrid.appendChild(fragment);
 }
-
 
 function addNewItem() {
   const id = document.getElementById('new-item-id').value.trim();
@@ -307,120 +288,86 @@ function addNewItem() {
   const price = parseFloat(document.getElementById('new-item-price').value);
   const imageInput = document.getElementById('new-item-image');
 
-  // Validate the inputs
-  if (id && name && price && imageInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-          const newItem = {
-              id: id,               
-              name: name,
-              price: price,
-              image: e.target.result 
-          };
-
-          menuItems.push(newItem); 
-          localStorage.setItem('menuItems', JSON.stringify(menuItems)); 
-          renderMenuItems(); 
-
-          document.getElementById('new-item-id').value = '';
-          document.getElementById('new-item-name').value = '';
-          document.getElementById('new-item-price').value = '';
-          document.getElementById('new-item-image').value = '';
-      };
-
-      reader.readAsDataURL(imageInput.files[0]); 
-      renderEditItemsTable();
-  } else {
-      alert("Please fill in all fields and upload an image.");
+  if (!id || !name || isNaN(price) || price <= 0 || !imageInput.files[0]) {//is not a number
+    alert("Please fill in all fields correctly and upload an image.");
+    return;
   }
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const imageBase64 = e.target.result;
+
+    const newItem = {
+      id: id,
+      name: name,
+      price: price,
+      image: imageBase64
+    };
+
+    menuItems.push(newItem);
+    localStorage.setItem('menuItems', JSON.stringify(menuItems));
+
+    renderMenuItems();
+    clearInputs();
+    renderEditItemsTable();
+  };
+
+  reader.readAsDataURL(imageInput.files[0]);
 }
 
-function reding(){
+function clearInputs() {
+  document.getElementById('new-item-id').value = '';
+  document.getElementById('new-item-name').value = '';
+  document.getElementById('new-item-price').value = '';
+  document.getElementById('new-item-image').value = '';
+}
 
+
+function reding() {
   document.getElementById('search-btn').addEventListener('click', function() {
     const searchQuery = document.getElementById('search-bar').value.trim().toLowerCase();
     render(searchQuery);
   });
-  
+
   function render(searchQuery = '') {
-    console.log("Rendering menu items:", menuItems);
-  
-    
-    if (!Array.isArray(menuItems)) {
-      console.error("menuItems is not an array or is undefined");
-      return;
-    }
-  
-    
-    if (menuItems.length === 0) {
-      console.error("menuItems array is empty");
-      return;
-    }
-  
-  
     const menuGrid = document.querySelector('.menu-grid');
-    if (!menuGrid) {
-      console.error("menu-grid container not found");
-      return;
-    }
-  
-    
-    const fragment = document.createDocumentFragment();
+    if (!menuGrid) return;
+
     let itemsFound = false;
-  
-   
+    menuGrid.innerHTML = ''; // clera krnn 
+
     menuItems.forEach((item) => {
-     
-      if (searchQuery !== '') {
-        if (item.id.toLowerCase().includes(searchQuery) || item.name.toLowerCase().includes(searchQuery)) {
-          itemsFound = true;
-  
-          const menuItemElement = document.createElement('div');
-          menuItemElement.classList.add('menu-item');
-          menuItemElement.setAttribute('onclick', `addToOrder('${item.name}', ${item.price})`);
-  
-          menuItemElement.innerHTML = `
-            <img src="${item.image}" alt="${item.name}" class="menu-img" />
-            <h3 class="menu-title">${item.name}</h3>
-            <p class="menu-price">$${item.price.toFixed(2)}</p>
-          `;
-  
-          fragment.appendChild(menuItemElement);
-        }
-      } else {
-       
+      const matchesSearch = item.id.toLowerCase().includes(searchQuery) || item.name.toLowerCase().includes(searchQuery);
+
+      if (searchQuery === '' || matchesSearch) {
         itemsFound = true;
-  
+        
         const menuItemElement = document.createElement('div');
         menuItemElement.classList.add('menu-item');
         menuItemElement.setAttribute('onclick', `addToOrder('${item.name}', ${item.price})`);
-  
+
         menuItemElement.innerHTML = `
           <img src="${item.image}" alt="${item.name}" class="menu-img" />
           <h3 class="menu-title">${item.name}</h3>
           <p class="menu-price">$${item.price.toFixed(2)}</p>
         `;
-  
-        fragment.appendChild(menuItemElement);
+        
+        menuGrid.appendChild(menuItemElement);
       }
     });
-  
-    
+
     if (!itemsFound) {
-      menuGrid.innerHTML = '<p style="color:red;">No items found</p>'; 
-    } else {
-      menuGrid.innerHTML = '';  
-      menuGrid.appendChild(fragment);  
+      menuGrid.innerHTML = '<p style="color:red;">No items found</p>';
     }
   }
-  
 }
+
 
 function renderEditItemsTable() {
   const tableBody = document.querySelector('#items-table tbody');
   tableBody.innerHTML = '';  
   
-  menuItems.forEach((item, index) => {
+  menuItems.forEach((item, index) => { // menuItems fieds get item...index means 0 to 1,2,3
     const row = document.createElement('tr');
     
     row.innerHTML = `
@@ -461,16 +408,19 @@ function saveEditedItems() {
 
   renderMenuItems();
   alert('Changes saved successfully!');
-}
+} //Genarat
 
 
-function removeItem(index) {
-  menuItems.splice(index, 1);
+function removeItem(index) { 
+  menuItems.splice(index, 1);//The number of items to remove. remove one item.
 
   renderEditItemsTable();
   alert('Item removed successfully!');
   renderMenuItems();
+
 }
+
+
 
 let orderItems = [];
 let currentOrderNumber = getNextOrderNumber();
@@ -482,7 +432,7 @@ function getNextOrderNumber() {
   return `ODR${String(lastNumber + 1).padStart(5, '0')}`;
 }
 
-
+//addtoorder
 function addToOrder(name, price) {
   const existingItem = orderItems.find(item => item.name === name);
 
@@ -491,7 +441,6 @@ function addToOrder(name, price) {
   } else {
     orderItems.push({ name, price, qty: 1 }); 
   }
-
   updateOrderList();
 }
 
@@ -517,8 +466,8 @@ function updateOrderList() {
     orderList.appendChild(orderItemElement);
   });
 
-  subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
-  totalElement.textContent = `$${subtotal.toFixed(2)}`;
+  subtotalElement.textContent = `$${subtotal.toFixed(2)}`;//twodecimal 1.00
+  totalElement.textContent = `$${subtotal.toFixed(2)}`;//<p id="subtotal">$20.00</p>
 }
 
 
