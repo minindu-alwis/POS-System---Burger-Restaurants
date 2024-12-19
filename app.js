@@ -560,6 +560,7 @@ function printBill() {
 }
 
 
+
 function renderOrdersTable() {
   const ordersTableBody = document.querySelector('#orders-table tbody');
   ordersTableBody.innerHTML = '';  
@@ -568,27 +569,19 @@ function renderOrdersTable() {
   orders.forEach((order, orderIndex) => {
     const row = document.createElement('tr');
 
-    
-    const itemsHtml = order.items.map((item, itemIndex) => {
-      return `
-        <div class="order-item">
-          <input type="text" value="${item.name}" class="edit-item-name" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
-          <input type="number" value="${item.qty}" class="edit-item-qty" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
-          <input type="number" value="${item.price}" class="edit-item-price" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
-        </div>`;
-    }).join('');
+    // Generate items HTML
+    const itemsHtml = order.items.map((item, itemIndex) => `
+      <div class="order-item">
+        <input type="text" value="${item.name}" class="edit-item-name" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+        <input type="number" value="${item.qty}" class="edit-item-qty" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+        <input type="number" value="${item.price}" class="edit-item-price" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
+      </div>`).join('');
 
     row.innerHTML = `
       <td>${order.id}</td>
-      <td>
-        <input type="text" value="${order.customerName}" class="edit-customer-name" data-order-index="${orderIndex}" />
-      </td>
-      <td>
-        <input type="text" value="${order.phoneNumber}" class="edit-customer-phone" data-order-index="${orderIndex}" />
-      </td>
-      <td>
-        ${itemsHtml}
-      </td>
+      <td><input type="text" value="${order.customerName}" class="edit-customer-name" data-order-index="${orderIndex}" /></td>
+      <td><input type="text" value="${order.phoneNumber}" class="edit-customer-phone" data-order-index="${orderIndex}" /></td>
+      <td>${itemsHtml}</td>
       <td>$${order.total.toFixed(2)}</td>
       <td>
         <button onclick="saveOrder(${orderIndex})">Save Changes</button>
@@ -599,69 +592,45 @@ function renderOrdersTable() {
     ordersTableBody.appendChild(row);
   });
 
-  
-  document.querySelectorAll('.edit-customer-name').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].customerName = e.target.value;
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
+  addEventListenersToEditableFields();
+}
 
-  document.querySelectorAll('.edit-customer-phone').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].phoneNumber = e.target.value;
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
+function addEventListenersToEditableFields() {
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
 
-  
-  document.querySelectorAll('.edit-item-name').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const itemIndex = e.target.getAttribute('data-item-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].items[itemIndex].name = e.target.value;
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
+  document.querySelectorAll('.edit-customer-name, .edit-customer-phone, .edit-item-name, .edit-item-qty, .edit-item-price')
+    .forEach(field => {
+      field.addEventListener('input', (e) => {
+        const { orderIndex, itemIndex } = e.target.dataset;
 
-  document.querySelectorAll('.edit-item-qty').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const itemIndex = e.target.getAttribute('data-item-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].items[itemIndex].qty = parseInt(e.target.value);
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
+        if (field.classList.contains('edit-customer-name')) {
+          orders[orderIndex].customerName = e.target.value;
+        } else if (field.classList.contains('edit-customer-phone')) {
+          orders[orderIndex].phoneNumber = e.target.value;
+        } else if (field.classList.contains('edit-item-name')) {
+          orders[orderIndex].items[itemIndex].name = e.target.value;
+        } else if (field.classList.contains('edit-item-qty')) {
+          orders[orderIndex].items[itemIndex].qty = parseInt(e.target.value);
+        } else if (field.classList.contains('edit-item-price')) {
+          orders[orderIndex].items[itemIndex].price = parseFloat(e.target.value);
+        }
 
-  document.querySelectorAll('.edit-item-price').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const itemIndex = e.target.getAttribute('data-item-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].items[itemIndex].price = parseFloat(e.target.value);
-      localStorage.setItem('orders', JSON.stringify(orders));
+        localStorage.setItem('orders', JSON.stringify(orders));
+      });
     });
-  });
 }
 
 function saveOrder(orderIndex) {
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
   const order = orders[orderIndex];
 
-  
-  order.total = order.items.reduce((acc, item) => acc + (item.qty * item.price), 0);
-  
- 
-  localStorage.setItem('orders', JSON.stringify(orders));
+  order.total = 0;
+  order.items.forEach(item => {
+    order.total += item.qty * item.price;
+  });
 
-  renderOrdersTable(); 
-  
+  localStorage.setItem('orders', JSON.stringify(orders));
+  renderOrdersTable();
 }
 
 function removeOrder(orderIndex) {
@@ -673,201 +642,159 @@ function removeOrder(orderIndex) {
 
 renderOrdersTable();
 
+//orderserch by id amd phone number 
 
 function renderOrdersTable(filteredOrders) {
   const ordersTableBody = document.querySelector('#orders-table tbody');
-  ordersTableBody.innerHTML = ''; 
+  ordersTableBody.innerHTML = '';
 
   const orders = filteredOrders || JSON.parse(localStorage.getItem('orders')) || [];
 
   orders.forEach((order, orderIndex) => {
     const row = document.createElement('tr');
 
-    
-    const itemsHtml = order.items.map((item, itemIndex) => {
-      return `
+    let itemsHtml = '';
+    order.items.forEach((item, itemIndex) => {
+      itemsHtml += `
         <div class="order-item">
           <input type="text" value="${item.name}" class="edit-item-name" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
           <input type="number" value="${item.qty}" class="edit-item-qty" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
           <input type="number" value="${item.price}" class="edit-item-price" data-order-index="${orderIndex}" data-item-index="${itemIndex}" />
         </div>`;
-    }).join('');
+    });
 
     row.innerHTML = `
       <td>${order.id}</td>
-      <td>
-        <input type="text" value="${order.customerName}" class="edit-customer-name" data-order-index="${orderIndex}" />
-      </td>
-      <td>
-        <input type="text" value="${order.phoneNumber}" class="edit-customer-phone" data-order-index="${orderIndex}" />
-      </td>
-      <td>
-        ${itemsHtml}
-      </td>
+      <td><input type="text" value="${order.customerName}" class="edit-customer-name" data-order-index="${orderIndex}" /></td>
+      <td><input type="text" value="${order.phoneNumber}" class="edit-customer-phone" data-order-index="${orderIndex}" /></td>
+      <td>${itemsHtml}</td>
       <td>$${order.total.toFixed(2)}</td>
       <td>
         <button onclick="saveOrder(${orderIndex})">Save Changes</button>
         <button onclick="removeOrder(${orderIndex})">Remove</button>
-      </td>
-    `;
+      </td>`;
 
     ordersTableBody.appendChild(row);
   });
 
-  
-  document.querySelectorAll('.edit-customer-name').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].customerName = e.target.value;
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
-
-  document.querySelectorAll('.edit-customer-phone').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].phoneNumber = e.target.value;
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
-
-  
-  document.querySelectorAll('.edit-item-name').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const itemIndex = e.target.getAttribute('data-item-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].items[itemIndex].name = e.target.value;
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
-
-  document.querySelectorAll('.edit-item-qty').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const itemIndex = e.target.getAttribute('data-item-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].items[itemIndex].qty = parseInt(e.target.value);
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
-
-  document.querySelectorAll('.edit-item-price').forEach(field => {
-    field.addEventListener('input', (e) => {
-      const orderIndex = e.target.getAttribute('data-order-index');
-      const itemIndex = e.target.getAttribute('data-item-index');
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders[orderIndex].items[itemIndex].price = parseFloat(e.target.value);
-      localStorage.setItem('orders', JSON.stringify(orders));
-    });
-  });
+  addEventListenersToEditableFields();
 }
+
+function addEventListenersToEditableFields() {
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+  document.querySelectorAll('.edit-customer-name, .edit-customer-phone, .edit-item-name, .edit-item-qty, .edit-item-price')
+    .forEach(field => {
+      field.addEventListener('input', (e) => {
+        const { orderIndex, itemIndex } = e.target.dataset;
+        const fieldClass = e.target.classList[0];
+
+        if (fieldClass === 'edit-customer-name') {
+          orders[orderIndex].customerName = e.target.value;
+        } else if (fieldClass === 'edit-customer-phone') {
+          orders[orderIndex].phoneNumber = e.target.value;
+        } else if (fieldClass === 'edit-item-name') {
+          orders[orderIndex].items[itemIndex].name = e.target.value;
+        } else if (fieldClass === 'edit-item-qty') {
+          orders[orderIndex].items[itemIndex].qty = parseInt(e.target.value);
+        } else if (fieldClass === 'edit-item-price') {
+          orders[orderIndex].items[itemIndex].price = parseFloat(e.target.value);
+        }
+
+        localStorage.setItem('orders', JSON.stringify(orders));
+      });
+    });
+}
+
 
 
 function searchOrders() {
   const searchInput = document.getElementById('search-input').value.toLowerCase();
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
 
-  
-  const filteredOrders = orders.filter(order => 
+  const filteredOrders = orders.filter(order =>
     order.id.toLowerCase().includes(searchInput) || 
     order.phoneNumber.includes(searchInput)
   );
 
-  if (filteredOrders.length === 0) {
-    alert('No orders found with the provided Order ID or Phone Number.');
+  if (filteredOrders.length > 0) {
+    renderOrdersTable(filteredOrders);
   } else {
-    renderOrdersTable(filteredOrders);  
+    alert('No orders found.');
   }
+  
 }
+
 
 
 
 function renderCustomersTable() {
-  const customersTableBody=document.querySelector('#customers-table tbody');
-  customersTableBody.innerHTML='';
-  const orders=JSON.parse(localStorage.getItem('orders'))||[];
-  const customersMap={};
-  orders.forEach(order=>{
-    if(!customersMap[order.phoneNumber]){
-      customersMap[order.phoneNumber]={
-        name:order.customerName,
-        phoneNumber:order.phoneNumber,
-        totalSpend:0
-      };
+  const customersTableBody = document.querySelector('#customers-table tbody');
+  customersTableBody.innerHTML = '';
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+  const customersMap = {};
+
+  orders.forEach(order => {
+    if (!customersMap[order.phoneNumber]) {
+      customersMap[order.phoneNumber] = { name: order.customerName, phoneNumber: order.phoneNumber, totalSpend: 0 };
     }
-    customersMap[order.phoneNumber].totalSpend+=order.total;
+    customersMap[order.phoneNumber].totalSpend += order.total;
   });
-  const customers=Object.values(customersMap);
-  customers.forEach((customer,index)=>{
-    const row=document.createElement('tr');
-    row.innerHTML=`
-      <td>
-        <input type="text" value="${customer.name}" class="edit-customer-name" data-index="${index}" />
-      </td>
-      <td>
-        <input type="text" value="${customer.phoneNumber}" class="edit-customer-phone" data-index="${index}" />
-      </td>
+
+  Object.values(customersMap).forEach((customer, index) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><input type="text" value="${customer.name}" class="edit-customer-name" data-index="${index}" /></td>
+      <td><input type="text" value="${customer.phoneNumber}" class="edit-customer-phone" data-index="${index}" /></td>
       <td>$${customer.totalSpend.toFixed(2)}</td>
-      <td>
-        <button onclick="saveCustomerDetails(${index},'${customer.phoneNumber}')">Save</button>
-      </td>
+      <td><button onclick="saveCustomerDetails(${index}, '${customer.phoneNumber}')">Save</button></td>
     `;
     customersTableBody.appendChild(row);
   });
-  localStorage.setItem('customersData',JSON.stringify(customers));
+
+  localStorage.setItem('customersData', JSON.stringify(Object.values(customersMap)));
 }
 
-function saveCustomerDetails(index,oldPhoneNumber){
-  const customers=JSON.parse(localStorage.getItem('customersData'))||[];
-  const orders=JSON.parse(localStorage.getItem('orders'))||[];
-  const newName=document.querySelectorAll('.edit-customer-name')[index].value;
-  const newPhone=document.querySelectorAll('.edit-customer-phone')[index].value;
-  orders.forEach(order=>{
-    if(order.phoneNumber===oldPhoneNumber){
-      order.customerName=newName;
-      order.phoneNumber=newPhone;
+
+function saveCustomerDetails(index, oldPhoneNumber) {
+  const customers = JSON.parse(localStorage.getItem('customersData')) || [];
+  const orders = JSON.parse(localStorage.getItem('orders')) || [];
+  const newName = document.querySelectorAll('.edit-customer-name')[index].value;
+  const newPhone = document.querySelectorAll('.edit-customer-phone')[index].value;
+
+  orders.forEach(order => {
+    if (order.phoneNumber === oldPhoneNumber) {
+      order.customerName = newName;
+      order.phoneNumber = newPhone;
     }
   });
-  localStorage.setItem('orders',JSON.stringify(orders));
-  alert('Customer details updated successfully!');
+
+  localStorage.setItem('orders', JSON.stringify(orders));
   renderCustomersTable();
 }
 
-
 function searchCustomer() {
   const searchInput = document.getElementById('customer-search-bar').value.trim();
-  const customersTableBody = document.querySelector('#customers-table tbody');
-
-  if (!searchInput) {
-    alert("Please enter a phone number to search.");
-    return;
-  }
+  if (!searchInput) return alert("Please enter a phone number to search.");
 
   const orders = JSON.parse(localStorage.getItem('orders')) || [];
-  
-
-  const filteredCustomers = orders.filter(order => order.phoneNumber.includes(searchInput));
-
+  const customersTableBody = document.querySelector('#customers-table tbody');
   customersTableBody.innerHTML = '';
 
-  if (filteredCustomers.length > 0) {
-    filteredCustomers.forEach(order => {
+  orders.forEach(order => {
+    if (order.phoneNumber.includes(searchInput)) {
       const row = `
         <tr>
           <td>${order.customerName}</td>
           <td>${order.phoneNumber}</td>
           <td>$${order.total.toFixed(2)}</td>
-          <td>
-            <button onclick="editCustomer('${order.phoneNumber}')">Edit</button>
-          </td>
-        </tr>
-      `;
-      customersTableBody.insertAdjacentHTML('beforeend', row);
-    });
-  } else {
-    alert("No customer found with the entered phone number.");
+          <td><button onclick="editCustomer('${order.phoneNumber}')">Edit</button></td>
+        </tr>`;
+      customersTableBody.insertAdjacentHTML('beforeend', row);// will be added to the end of the current content
+    }
+  });
+
+  if (customersTableBody.innerHTML === '') {
+    alert("No customer found with the entered phone number.");//table body is empty
   }
 }
