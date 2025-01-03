@@ -797,4 +797,5 @@ function searchCustomer() {
   if (customersTableBody.innerHTML === '') {
     alert("No customer found with the entered phone number.");//table body is empty
   }
+  
 }

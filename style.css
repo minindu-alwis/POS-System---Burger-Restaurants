@@ -113,6 +113,7 @@ img {
 }
 
 .header {
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -359,7 +360,7 @@ img {
 
 /* Header Section */
 .header {
-  background-color: #f8b400;
+  background-color: #000000;
   color: #fff;
   padding: 20px;
   text-align: center;
