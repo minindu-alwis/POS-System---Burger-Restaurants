@@ -739,7 +739,7 @@ input[type="text"] {
 }
 
 #customers-table button {
-  background-color: #28a745;
+  background-color: #000000;
   color: white;
   border: none;
   padding: 5px 10px;
@@ -836,7 +836,7 @@ input[type="text"] {
 
 
 .customer-search-btn {
-  background-color: #007BFF;
+  background-color: #000000;
   color: white;
   border: none;
   padding: 8px 14px;
